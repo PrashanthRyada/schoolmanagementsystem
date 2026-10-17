@@ -371,6 +371,493 @@ export declare const DeleteStudentParams: zod.ZodObject<{
 }>;
 export declare const DeleteStudentResponse: zod.ZodVoid;
 /**
+ * @summary List teachers with assigned classes
+ */
+export declare const GetTeachersQueryParams: zod.ZodObject<{
+    search: zod.ZodOptional<zod.ZodString>;
+}, "strip", zod.ZodTypeAny, {
+    search?: string | undefined;
+}, {
+    search?: string | undefined;
+}>;
+export declare const GetTeachersResponseItem: zod.ZodObject<{
+    id: zod.ZodNumber;
+    name: zod.ZodString;
+    email: zod.ZodString;
+    phone: zod.ZodString;
+    subject: zod.ZodString;
+    department: zod.ZodString;
+    qualification: zod.ZodString;
+    avatarUrl: zod.ZodOptional<zod.ZodNullable<zod.ZodString>>;
+    classes: zod.ZodArray<zod.ZodObject<{
+        id: zod.ZodNumber;
+        name: zod.ZodString;
+        grade: zod.ZodString;
+        section: zod.ZodString;
+        room: zod.ZodString;
+        studentCount: zod.ZodNumber;
+    }, "strip", zod.ZodTypeAny, {
+        studentCount: number;
+        id: number;
+        name: string;
+        grade: string;
+        section: string;
+        room: string;
+    }, {
+        studentCount: number;
+        id: number;
+        name: string;
+        grade: string;
+        section: string;
+        room: string;
+    }>, "many">;
+    studentCount: zod.ZodNumber;
+}, "strip", zod.ZodTypeAny, {
+    studentCount: number;
+    id: number;
+    name: string;
+    email: string;
+    phone: string;
+    subject: string;
+    department: string;
+    qualification: string;
+    classes: {
+        studentCount: number;
+        id: number;
+        name: string;
+        grade: string;
+        section: string;
+        room: string;
+    }[];
+    avatarUrl?: string | null | undefined;
+}, {
+    studentCount: number;
+    id: number;
+    name: string;
+    email: string;
+    phone: string;
+    subject: string;
+    department: string;
+    qualification: string;
+    classes: {
+        studentCount: number;
+        id: number;
+        name: string;
+        grade: string;
+        section: string;
+        room: string;
+    }[];
+    avatarUrl?: string | null | undefined;
+}>;
+export declare const GetTeachersResponse: zod.ZodArray<zod.ZodObject<{
+    id: zod.ZodNumber;
+    name: zod.ZodString;
+    email: zod.ZodString;
+    phone: zod.ZodString;
+    subject: zod.ZodString;
+    department: zod.ZodString;
+    qualification: zod.ZodString;
+    avatarUrl: zod.ZodOptional<zod.ZodNullable<zod.ZodString>>;
+    classes: zod.ZodArray<zod.ZodObject<{
+        id: zod.ZodNumber;
+        name: zod.ZodString;
+        grade: zod.ZodString;
+        section: zod.ZodString;
+        room: zod.ZodString;
+        studentCount: zod.ZodNumber;
+    }, "strip", zod.ZodTypeAny, {
+        studentCount: number;
+        id: number;
+        name: string;
+        grade: string;
+        section: string;
+        room: string;
+    }, {
+        studentCount: number;
+        id: number;
+        name: string;
+        grade: string;
+        section: string;
+        room: string;
+    }>, "many">;
+    studentCount: zod.ZodNumber;
+}, "strip", zod.ZodTypeAny, {
+    studentCount: number;
+    id: number;
+    name: string;
+    email: string;
+    phone: string;
+    subject: string;
+    department: string;
+    qualification: string;
+    classes: {
+        studentCount: number;
+        id: number;
+        name: string;
+        grade: string;
+        section: string;
+        room: string;
+    }[];
+    avatarUrl?: string | null | undefined;
+}, {
+    studentCount: number;
+    id: number;
+    name: string;
+    email: string;
+    phone: string;
+    subject: string;
+    department: string;
+    qualification: string;
+    classes: {
+        studentCount: number;
+        id: number;
+        name: string;
+        grade: string;
+        section: string;
+        room: string;
+    }[];
+    avatarUrl?: string | null | undefined;
+}>, "many">;
+/**
+ * @summary Create a teacher
+ */
+export declare const CreateTeacherBody: zod.ZodObject<{
+    name: zod.ZodString;
+    email: zod.ZodString;
+    phone: zod.ZodOptional<zod.ZodString>;
+    subject: zod.ZodString;
+    department: zod.ZodString;
+    qualification: zod.ZodOptional<zod.ZodString>;
+    avatarUrl: zod.ZodOptional<zod.ZodNullable<zod.ZodString>>;
+}, "strip", zod.ZodTypeAny, {
+    name: string;
+    email: string;
+    subject: string;
+    department: string;
+    phone?: string | undefined;
+    avatarUrl?: string | null | undefined;
+    qualification?: string | undefined;
+}, {
+    name: string;
+    email: string;
+    subject: string;
+    department: string;
+    phone?: string | undefined;
+    avatarUrl?: string | null | undefined;
+    qualification?: string | undefined;
+}>;
+export declare const CreateTeacherResponse: zod.ZodObject<{
+    id: zod.ZodNumber;
+    name: zod.ZodString;
+    email: zod.ZodString;
+    phone: zod.ZodString;
+    subject: zod.ZodString;
+    department: zod.ZodString;
+    qualification: zod.ZodString;
+    avatarUrl: zod.ZodOptional<zod.ZodNullable<zod.ZodString>>;
+    classes: zod.ZodArray<zod.ZodObject<{
+        id: zod.ZodNumber;
+        name: zod.ZodString;
+        grade: zod.ZodString;
+        section: zod.ZodString;
+        room: zod.ZodString;
+        studentCount: zod.ZodNumber;
+    }, "strip", zod.ZodTypeAny, {
+        studentCount: number;
+        id: number;
+        name: string;
+        grade: string;
+        section: string;
+        room: string;
+    }, {
+        studentCount: number;
+        id: number;
+        name: string;
+        grade: string;
+        section: string;
+        room: string;
+    }>, "many">;
+    studentCount: zod.ZodNumber;
+}, "strip", zod.ZodTypeAny, {
+    studentCount: number;
+    id: number;
+    name: string;
+    email: string;
+    phone: string;
+    subject: string;
+    department: string;
+    qualification: string;
+    classes: {
+        studentCount: number;
+        id: number;
+        name: string;
+        grade: string;
+        section: string;
+        room: string;
+    }[];
+    avatarUrl?: string | null | undefined;
+}, {
+    studentCount: number;
+    id: number;
+    name: string;
+    email: string;
+    phone: string;
+    subject: string;
+    department: string;
+    qualification: string;
+    classes: {
+        studentCount: number;
+        id: number;
+        name: string;
+        grade: string;
+        section: string;
+        room: string;
+    }[];
+    avatarUrl?: string | null | undefined;
+}>;
+/**
+ * @summary Get teacher profile with assigned classes and student roster
+ */
+export declare const GetTeacherByIdParams: zod.ZodObject<{
+    teacherId: zod.ZodNumber;
+}, "strip", zod.ZodTypeAny, {
+    teacherId: number;
+}, {
+    teacherId: number;
+}>;
+export declare const GetTeacherByIdResponse: zod.ZodObject<{
+    id: zod.ZodNumber;
+    name: zod.ZodString;
+    email: zod.ZodString;
+    phone: zod.ZodString;
+    subject: zod.ZodString;
+    department: zod.ZodString;
+    qualification: zod.ZodString;
+    avatarUrl: zod.ZodOptional<zod.ZodNullable<zod.ZodString>>;
+    classes: zod.ZodArray<zod.ZodObject<{
+        id: zod.ZodNumber;
+        name: zod.ZodString;
+        grade: zod.ZodString;
+        section: zod.ZodString;
+        room: zod.ZodString;
+        studentCount: zod.ZodNumber;
+    }, "strip", zod.ZodTypeAny, {
+        studentCount: number;
+        id: number;
+        name: string;
+        grade: string;
+        section: string;
+        room: string;
+    }, {
+        studentCount: number;
+        id: number;
+        name: string;
+        grade: string;
+        section: string;
+        room: string;
+    }>, "many">;
+    studentCount: zod.ZodNumber;
+    students: zod.ZodArray<zod.ZodObject<{
+        id: zod.ZodNumber;
+        name: zod.ZodString;
+        admissionNumber: zod.ZodString;
+        grade: zod.ZodString;
+        section: zod.ZodString;
+        className: zod.ZodOptional<zod.ZodNullable<zod.ZodString>>;
+        email: zod.ZodString;
+        phone: zod.ZodOptional<zod.ZodString>;
+    }, "strip", zod.ZodTypeAny, {
+        id: number;
+        name: string;
+        admissionNumber: string;
+        grade: string;
+        section: string;
+        email: string;
+        phone?: string | undefined;
+        className?: string | null | undefined;
+    }, {
+        id: number;
+        name: string;
+        admissionNumber: string;
+        grade: string;
+        section: string;
+        email: string;
+        phone?: string | undefined;
+        className?: string | null | undefined;
+    }>, "many">;
+}, "strip", zod.ZodTypeAny, {
+    studentCount: number;
+    id: number;
+    name: string;
+    email: string;
+    phone: string;
+    subject: string;
+    department: string;
+    qualification: string;
+    classes: {
+        studentCount: number;
+        id: number;
+        name: string;
+        grade: string;
+        section: string;
+        room: string;
+    }[];
+    students: {
+        id: number;
+        name: string;
+        admissionNumber: string;
+        grade: string;
+        section: string;
+        email: string;
+        phone?: string | undefined;
+        className?: string | null | undefined;
+    }[];
+    avatarUrl?: string | null | undefined;
+}, {
+    studentCount: number;
+    id: number;
+    name: string;
+    email: string;
+    phone: string;
+    subject: string;
+    department: string;
+    qualification: string;
+    classes: {
+        studentCount: number;
+        id: number;
+        name: string;
+        grade: string;
+        section: string;
+        room: string;
+    }[];
+    students: {
+        id: number;
+        name: string;
+        admissionNumber: string;
+        grade: string;
+        section: string;
+        email: string;
+        phone?: string | undefined;
+        className?: string | null | undefined;
+    }[];
+    avatarUrl?: string | null | undefined;
+}>;
+/**
+ * @summary Update teacher
+ */
+export declare const UpdateTeacherParams: zod.ZodObject<{
+    teacherId: zod.ZodNumber;
+}, "strip", zod.ZodTypeAny, {
+    teacherId: number;
+}, {
+    teacherId: number;
+}>;
+export declare const UpdateTeacherBody: zod.ZodObject<{
+    name: zod.ZodOptional<zod.ZodString>;
+    email: zod.ZodOptional<zod.ZodString>;
+    phone: zod.ZodOptional<zod.ZodString>;
+    subject: zod.ZodOptional<zod.ZodString>;
+    department: zod.ZodOptional<zod.ZodString>;
+    qualification: zod.ZodOptional<zod.ZodString>;
+    avatarUrl: zod.ZodOptional<zod.ZodNullable<zod.ZodString>>;
+}, "strip", zod.ZodTypeAny, {
+    name?: string | undefined;
+    email?: string | undefined;
+    phone?: string | undefined;
+    avatarUrl?: string | null | undefined;
+    subject?: string | undefined;
+    department?: string | undefined;
+    qualification?: string | undefined;
+}, {
+    name?: string | undefined;
+    email?: string | undefined;
+    phone?: string | undefined;
+    avatarUrl?: string | null | undefined;
+    subject?: string | undefined;
+    department?: string | undefined;
+    qualification?: string | undefined;
+}>;
+export declare const UpdateTeacherResponse: zod.ZodObject<{
+    id: zod.ZodNumber;
+    name: zod.ZodString;
+    email: zod.ZodString;
+    phone: zod.ZodString;
+    subject: zod.ZodString;
+    department: zod.ZodString;
+    qualification: zod.ZodString;
+    avatarUrl: zod.ZodOptional<zod.ZodNullable<zod.ZodString>>;
+    classes: zod.ZodArray<zod.ZodObject<{
+        id: zod.ZodNumber;
+        name: zod.ZodString;
+        grade: zod.ZodString;
+        section: zod.ZodString;
+        room: zod.ZodString;
+        studentCount: zod.ZodNumber;
+    }, "strip", zod.ZodTypeAny, {
+        studentCount: number;
+        id: number;
+        name: string;
+        grade: string;
+        section: string;
+        room: string;
+    }, {
+        studentCount: number;
+        id: number;
+        name: string;
+        grade: string;
+        section: string;
+        room: string;
+    }>, "many">;
+    studentCount: zod.ZodNumber;
+}, "strip", zod.ZodTypeAny, {
+    studentCount: number;
+    id: number;
+    name: string;
+    email: string;
+    phone: string;
+    subject: string;
+    department: string;
+    qualification: string;
+    classes: {
+        studentCount: number;
+        id: number;
+        name: string;
+        grade: string;
+        section: string;
+        room: string;
+    }[];
+    avatarUrl?: string | null | undefined;
+}, {
+    studentCount: number;
+    id: number;
+    name: string;
+    email: string;
+    phone: string;
+    subject: string;
+    department: string;
+    qualification: string;
+    classes: {
+        studentCount: number;
+        id: number;
+        name: string;
+        grade: string;
+        section: string;
+        room: string;
+    }[];
+    avatarUrl?: string | null | undefined;
+}>;
+/**
+ * @summary Delete a teacher
+ */
+export declare const DeleteTeacherParams: zod.ZodObject<{
+    teacherId: zod.ZodNumber;
+}, "strip", zod.ZodTypeAny, {
+    teacherId: number;
+}, {
+    teacherId: number;
+}>;
+export declare const DeleteTeacherResponse: zod.ZodVoid;
+/**
  * @summary List staff
  */
 export declare const GetStaffResponseItem: zod.ZodObject<{
@@ -384,15 +871,15 @@ export declare const GetStaffResponseItem: zod.ZodObject<{
     id: number;
     name: string;
     email: string;
-    role: string;
     department: string;
+    role: string;
     avatarUrl?: string | null | undefined;
 }, {
     id: number;
     name: string;
     email: string;
-    role: string;
     department: string;
+    role: string;
     avatarUrl?: string | null | undefined;
 }>;
 export declare const GetStaffResponse: zod.ZodArray<zod.ZodObject<{
@@ -406,15 +893,15 @@ export declare const GetStaffResponse: zod.ZodArray<zod.ZodObject<{
     id: number;
     name: string;
     email: string;
-    role: string;
     department: string;
+    role: string;
     avatarUrl?: string | null | undefined;
 }, {
     id: number;
     name: string;
     email: string;
-    role: string;
     department: string;
+    role: string;
     avatarUrl?: string | null | undefined;
 }>, "many">;
 /**
@@ -436,20 +923,20 @@ export declare const GetClassesResponseItem: zod.ZodObject<{
     name: string;
     grade: string;
     section: string;
+    room: string;
     teacherId: number | null;
     teacherName: string | null;
     studentIds: number[];
-    room: string;
 }, {
     studentCount: number;
     id: number;
     name: string;
     grade: string;
     section: string;
+    room: string;
     teacherId: number | null;
     teacherName: string | null;
     studentIds: number[];
-    room: string;
 }>;
 export declare const GetClassesResponse: zod.ZodArray<zod.ZodObject<{
     id: zod.ZodNumber;
@@ -467,20 +954,20 @@ export declare const GetClassesResponse: zod.ZodArray<zod.ZodObject<{
     name: string;
     grade: string;
     section: string;
+    room: string;
     teacherId: number | null;
     teacherName: string | null;
     studentIds: number[];
-    room: string;
 }, {
     studentCount: number;
     id: number;
     name: string;
     grade: string;
     section: string;
+    room: string;
     teacherId: number | null;
     teacherName: string | null;
     studentIds: number[];
-    room: string;
 }>, "many">;
 /**
  * @summary Create a class
@@ -523,20 +1010,20 @@ export declare const CreateClassResponse: zod.ZodObject<{
     name: string;
     grade: string;
     section: string;
+    room: string;
     teacherId: number | null;
     teacherName: string | null;
     studentIds: number[];
-    room: string;
 }, {
     studentCount: number;
     id: number;
     name: string;
     grade: string;
     section: string;
+    room: string;
     teacherId: number | null;
     teacherName: string | null;
     studentIds: number[];
-    room: string;
 }>;
 /**
  * @summary Update a class and student mappings
@@ -559,16 +1046,16 @@ export declare const UpdateClassBody: zod.ZodObject<{
     name?: string | undefined;
     grade?: string | undefined;
     section?: string | undefined;
+    room?: string | undefined;
     teacherId?: number | null | undefined;
     studentIds?: number[] | undefined;
-    room?: string | undefined;
 }, {
     name?: string | undefined;
     grade?: string | undefined;
     section?: string | undefined;
+    room?: string | undefined;
     teacherId?: number | null | undefined;
     studentIds?: number[] | undefined;
-    room?: string | undefined;
 }>;
 export declare const UpdateClassResponse: zod.ZodObject<{
     id: zod.ZodNumber;
@@ -586,20 +1073,20 @@ export declare const UpdateClassResponse: zod.ZodObject<{
     name: string;
     grade: string;
     section: string;
+    room: string;
     teacherId: number | null;
     teacherName: string | null;
     studentIds: number[];
-    room: string;
 }, {
     studentCount: number;
     id: number;
     name: string;
     grade: string;
     section: string;
+    room: string;
     teacherId: number | null;
     teacherName: string | null;
     studentIds: number[];
-    room: string;
 }>;
 /**
  * @summary Delete a class

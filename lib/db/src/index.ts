@@ -42,6 +42,16 @@ CREATE TABLE IF NOT EXISTS "school_attendance" (
 	"status" text NOT NULL,
 	"note" text
 );
+CREATE TABLE IF NOT EXISTS "school_teachers" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"name" text NOT NULL,
+	"email" text NOT NULL UNIQUE,
+	"phone" text DEFAULT '' NOT NULL,
+	"subject" text NOT NULL,
+	"department" text NOT NULL,
+	"qualification" text DEFAULT '' NOT NULL,
+	"avatar_url" text
+);
 CREATE TABLE IF NOT EXISTS "school_classes" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"name" text NOT NULL,

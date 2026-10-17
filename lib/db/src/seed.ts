@@ -8,35 +8,118 @@ import {
   performanceTable,
   staffTable,
   studentsTable,
+  teachersTable,
 } from "./schema";
 
 export async function seedDatabase(db: any) {
+  // 1. Teachers (Dedicated Table with direct relations to Classes and Students)
+  const [teacherCount] = await db.select({ value: count() }).from(teachersTable);
+  let insertedTeachers: any[] = [];
+  if (!teacherCount || Number(teacherCount.value) === 0) {
+    const teacherData = [
+      {
+        name: "Elena Rostova",
+        email: "elena.rostova@willowcreek.edu",
+        phone: "+91 98765 11001",
+        subject: "Physics & Natural Sciences",
+        department: "Science",
+        qualification: "M.Sc. Physics, B.Ed (10+ yrs exp)",
+        avatarUrl: null,
+      },
+      {
+        name: "Marcus Vance",
+        email: "marcus.vance@willowcreek.edu",
+        phone: "+91 98765 11002",
+        subject: "Pure & Applied Mathematics",
+        department: "Mathematics",
+        qualification: "M.Sc. Applied Mathematics",
+        avatarUrl: null,
+      },
+      {
+        name: "Sarah Jenkins",
+        email: "sarah.jenkins@willowcreek.edu",
+        phone: "+91 98765 11003",
+        subject: "World History & Literature",
+        department: "Humanities",
+        qualification: "M.A. English & History",
+        avatarUrl: null,
+      },
+      {
+        name: "David O'Connor",
+        email: "david.oconnor@willowcreek.edu",
+        phone: "+91 98765 11004",
+        subject: "Physical Education & Health",
+        department: "Athletics",
+        qualification: "B.P.Ed, Certified Athletics Coach",
+        avatarUrl: null,
+      },
+      {
+        name: "Amina Patel",
+        email: "amina.patel@willowcreek.edu",
+        phone: "+91 98765 11005",
+        subject: "Fine Arts & Studio Design",
+        department: "Creative Arts",
+        qualification: "M.F.A, Visual Arts Specialization",
+        avatarUrl: null,
+      },
+      {
+        name: "Robert Sterling",
+        email: "robert.sterling@willowcreek.edu",
+        phone: "+91 98765 11006",
+        subject: "Computer Science & Robotics",
+        department: "Technology",
+        qualification: "B.Tech, M.Tech Computer Engineering",
+        avatarUrl: null,
+      },
+    ];
+    insertedTeachers = await db.insert(teachersTable).values(teacherData).returning();
+
+    // If classes already exist, assign teachers to them
+    const existingClasses = await db.select().from(classesTable);
+    if (existingClasses.length > 0) {
+      if (existingClasses[0] && insertedTeachers[0]) {
+        await db.update(classesTable).set({ teacherId: insertedTeachers[0].id }).where(eq(classesTable.id, existingClasses[0].id));
+      }
+      if (existingClasses[1] && insertedTeachers[1]) {
+        await db.update(classesTable).set({ teacherId: insertedTeachers[1].id }).where(eq(classesTable.id, existingClasses[1].id));
+      }
+      if (existingClasses[2] && insertedTeachers[4]) {
+        await db.update(classesTable).set({ teacherId: insertedTeachers[4].id }).where(eq(classesTable.id, existingClasses[2].id));
+      }
+      if (existingClasses[3] && insertedTeachers[2]) {
+        await db.update(classesTable).set({ teacherId: insertedTeachers[2].id }).where(eq(classesTable.id, existingClasses[3].id));
+      }
+    }
+  }
+
   const [studentCount] = await db.select({ value: count() }).from(studentsTable);
   if (studentCount && Number(studentCount.value) > 0) {
     return; // Database is already seeded
   }
 
-  // 1. Staff
+  if (insertedTeachers.length === 0) {
+    insertedTeachers = await db.select().from(teachersTable);
+  }
+
+  // 2. School Staff (General administration & support)
   const staffData = [
     { name: "Dr. Alistair Finch", role: "Principal", email: "principal@willowcreek.edu", department: "Administration" },
-    { name: "Elena Rostova", role: "Head of Science", email: "elena.rostova@willowcreek.edu", department: "Science" },
-    { name: "Marcus Vance", role: "Mathematics Lead", email: "marcus.vance@willowcreek.edu", department: "Mathematics" },
-    { name: "Sarah Jenkins", role: "Humanities & History", email: "sarah.jenkins@willowcreek.edu", department: "Humanities" },
-    { name: "David O'Connor", role: "Athletics Director", email: "david.oconnor@willowcreek.edu", department: "Athletics" },
-    { name: "Amina Patel", role: "Art & Music Director", email: "amina.patel@willowcreek.edu", department: "Arts" },
+    { name: "Rachel Adams", role: "Head Librarian", email: "rachel.adams@willowcreek.edu", department: "Library" },
+    { name: "Suresh Pillai", role: "Laboratory Coordinator", email: "suresh.pillai@willowcreek.edu", department: "Science" },
+    { name: "Miriam Vance", role: "Student Counselor", email: "miriam.vance@willowcreek.edu", department: "Student Welfare" },
   ];
   const insertedStaff = await db.insert(staffTable).values(staffData).returning();
 
-  // 2. Classes
+  // 3. Classes (Linked with Teachers via teacherId)
   const classData = [
-    { name: "Cedar Room", grade: "9", section: "A", teacherId: insertedStaff[1]?.id ?? null, room: "Building A - 101" },
-    { name: "Maple Room", grade: "10", section: "B", teacherId: insertedStaff[2]?.id ?? null, room: "Building B - 204" },
-    { name: "Oak Studio", grade: "11", section: "A", teacherId: insertedStaff[5]?.id ?? null, room: "Arts Wing - 12" },
-    { name: "Willow Lab", grade: "12", section: "Advanced", teacherId: insertedStaff[3]?.id ?? null, room: "Science Block - 3" },
+    { name: "Cedar Room", grade: "9", section: "A", teacherId: insertedTeachers[0]?.id ?? null, room: "Building A - 101" },
+    { name: "Maple Room", grade: "10", section: "B", teacherId: insertedTeachers[1]?.id ?? null, room: "Building B - 204" },
+    { name: "Oak Studio", grade: "11", section: "A", teacherId: insertedTeachers[4]?.id ?? null, room: "Arts Wing - 12" },
+    { name: "Willow Lab", grade: "12", section: "Advanced", teacherId: insertedTeachers[2]?.id ?? null, room: "Science Block - 3" },
   ];
   const insertedClasses = await db.insert(classesTable).values(classData).returning();
 
-  // 3. Students
+  // 4. Students (Linked with Classes)
   const studentData = [
     { name: "Aarav Sharma", admissionNumber: "WC-2024-001", grade: "9", section: "A", email: "aarav.sharma@family.com", phone: "+91 98765 43210", classId: insertedClasses[0]?.id },
     { name: "Diya Patel", admissionNumber: "WC-2024-002", grade: "9", section: "A", email: "diya.patel@family.com", phone: "+91 98765 43211", classId: insertedClasses[0]?.id },
@@ -49,7 +132,7 @@ export async function seedDatabase(db: any) {
   ];
   const insertedStudents = await db.insert(studentsTable).values(studentData).returning();
 
-  // 4. Attendance (Today)
+  // 5. Attendance (Today)
   const today = new Date().toISOString().slice(0, 10);
   const attendanceData = [
     ...insertedStudents.map((s: any, idx: number) => ({
@@ -71,7 +154,7 @@ export async function seedDatabase(db: any) {
   ];
   await db.insert(attendanceTable).values(attendanceData);
 
-  // 5. Fees
+  // 6. Fees
   const feeData = [
     { studentId: insertedStudents[0].id, period: "Term 1 - 2024", amount: 45000, paidAmount: 45000, dueDate: "2024-08-15" },
     { studentId: insertedStudents[0].id, period: "Term 2 - 2024", amount: 45000, paidAmount: 30000, dueDate: "2024-12-15" },
@@ -87,7 +170,7 @@ export async function seedDatabase(db: any) {
   ];
   await db.insert(feesTable).values(feeData);
 
-  // 6. Student Performance
+  // 7. Student Performance
   const performanceData = [
     { studentId: insertedStudents[0].id, subject: "Mathematics", assessment: "Diagnostic Quiz", score: 88, maxScore: 100, recordedAt: "2024-09-10" },
     { studentId: insertedStudents[0].id, subject: "Mathematics", assessment: "Midterm Exam", score: 92, maxScore: 100, recordedAt: "2024-10-14" },
@@ -100,7 +183,7 @@ export async function seedDatabase(db: any) {
   ];
   await db.insert(performanceTable).values(performanceData);
 
-  // 7. Events
+  // 8. Events
   const eventData = [
     {
       title: "Annual Science & Innovation Fair",
@@ -141,7 +224,7 @@ export async function seedDatabase(db: any) {
   ];
   await db.insert(eventsTable).values(eventData);
 
-  // 8. Homepage Media
+  // 9. Homepage Media
   const mediaData = [
     {
       title: "A place to learn, grow and belong",

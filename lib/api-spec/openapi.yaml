@@ -14,6 +14,8 @@ tags:
     description: School dashboard summaries
   - name: students
     description: Student records and academic performance
+  - name: teachers
+    description: Teachers and classroom faculty management
   - name: staff
     description: Staff records
   - name: classes
@@ -116,6 +118,78 @@ paths:
       responses:
         "204": { description: Student deleted }
         "404": { description: Student not found }
+  /teachers:
+    get:
+      operationId: getTeachers
+      tags: [teachers]
+      summary: List teachers with assigned classes
+      parameters:
+        - in: query
+          name: search
+          schema: { type: string }
+      responses:
+        "200":
+          description: List of teachers
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/Teacher" }
+    post:
+      operationId: createTeacher
+      tags: [teachers]
+      summary: Create a teacher
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/TeacherInput" }
+      responses:
+        "201":
+          description: Teacher created
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Teacher" }
+  /teachers/{teacherId}:
+    parameters:
+      - in: path
+        name: teacherId
+        required: true
+        schema: { type: integer }
+    get:
+      operationId: getTeacherById
+      tags: [teachers]
+      summary: Get teacher profile with assigned classes and student roster
+      responses:
+        "200":
+          description: Teacher details
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/TeacherDetail" }
+        "404": { description: Teacher not found }
+    patch:
+      operationId: updateTeacher
+      tags: [teachers]
+      summary: Update teacher
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/TeacherUpdate" }
+      responses:
+        "200":
+          description: Updated teacher
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Teacher" }
+        "404": { description: Teacher not found }
+    delete:
+      operationId: deleteTeacher
+      tags: [teachers]
+      summary: Delete a teacher
+      responses:
+        "204": { description: Teacher deleted }
+        "404": { description: Teacher not found }
   /staff:
     get:
       operationId: getStaff
@@ -484,6 +558,91 @@ components:
         phone: { type: string }
         avatarUrl: { type: ["string", "null"] }
         classId: { type: ["integer", "null"] }
+    Teacher:
+      type: object
+      required: [id, name, email, phone, subject, department, qualification, classes, studentCount]
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        email: { type: string }
+        phone: { type: string }
+        subject: { type: string }
+        department: { type: string }
+        qualification: { type: string }
+        avatarUrl: { type: ["string", "null"] }
+        classes:
+          type: array
+          items:
+            type: object
+            required: [id, name, grade, section, room, studentCount]
+            properties:
+              id: { type: integer }
+              name: { type: string }
+              grade: { type: string }
+              section: { type: string }
+              room: { type: string }
+              studentCount: { type: integer }
+        studentCount: { type: integer }
+    TeacherInput:
+      type: object
+      required: [name, email, subject, department]
+      properties:
+        name: { type: string, minLength: 1 }
+        email: { type: string, minLength: 1 }
+        phone: { type: string }
+        subject: { type: string, minLength: 1 }
+        department: { type: string, minLength: 1 }
+        qualification: { type: string }
+        avatarUrl: { type: ["string", "null"] }
+    TeacherUpdate:
+      type: object
+      properties:
+        name: { type: string, minLength: 1 }
+        email: { type: string, minLength: 1 }
+        phone: { type: string }
+        subject: { type: string, minLength: 1 }
+        department: { type: string, minLength: 1 }
+        qualification: { type: string }
+        avatarUrl: { type: ["string", "null"] }
+    TeacherDetail:
+      type: object
+      required: [id, name, email, phone, subject, department, qualification, classes, studentCount, students]
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        email: { type: string }
+        phone: { type: string }
+        subject: { type: string }
+        department: { type: string }
+        qualification: { type: string }
+        avatarUrl: { type: ["string", "null"] }
+        classes:
+          type: array
+          items:
+            type: object
+            required: [id, name, grade, section, room, studentCount]
+            properties:
+              id: { type: integer }
+              name: { type: string }
+              grade: { type: string }
+              section: { type: string }
+              room: { type: string }
+              studentCount: { type: integer }
+        studentCount: { type: integer }
+        students:
+          type: array
+          items:
+            type: object
+            required: [id, name, admissionNumber, grade, section, email]
+            properties:
+              id: { type: integer }
+              name: { type: string }
+              admissionNumber: { type: string }
+              grade: { type: string }
+              section: { type: string }
+              className: { type: ["string", "null"] }
+              email: { type: string }
+              phone: { type: string }
     Staff:
       type: object
       required: [id, name, role, email, department]

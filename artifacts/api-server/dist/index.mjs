@@ -20732,27 +20732,27 @@ var require_router = __commonJS({
     var slice = Array.prototype.slice;
     var flatten = Array.prototype.flat;
     var methods = METHODS.map((method) => method.toLowerCase());
-    module.exports = Router9;
+    module.exports = Router10;
     module.exports.Route = Route;
-    function Router9(options) {
-      if (!(this instanceof Router9)) {
-        return new Router9(options);
+    function Router10(options) {
+      if (!(this instanceof Router10)) {
+        return new Router10(options);
       }
       const opts = options || {};
-      function router9(req, res, next) {
-        router9.handle(req, res, next);
+      function router10(req, res, next) {
+        router10.handle(req, res, next);
       }
-      Object.setPrototypeOf(router9, this);
-      router9.caseSensitive = opts.caseSensitive;
-      router9.mergeParams = opts.mergeParams;
-      router9.params = {};
-      router9.strict = opts.strict;
-      router9.stack = [];
-      return router9;
+      Object.setPrototypeOf(router10, this);
+      router10.caseSensitive = opts.caseSensitive;
+      router10.mergeParams = opts.mergeParams;
+      router10.params = {};
+      router10.strict = opts.strict;
+      router10.stack = [];
+      return router10;
     }
-    Router9.prototype = function() {
+    Router10.prototype = function() {
     };
-    Router9.prototype.param = function param(name, fn) {
+    Router10.prototype.param = function param(name, fn) {
       if (!name) {
         throw new TypeError("argument name is required");
       }
@@ -20772,7 +20772,7 @@ var require_router = __commonJS({
       params.push(fn);
       return this;
     };
-    Router9.prototype.handle = function handle(req, res, callback) {
+    Router10.prototype.handle = function handle(req, res, callback) {
       if (!callback) {
         throw new TypeError("argument callback is required");
       }
@@ -20899,7 +20899,7 @@ var require_router = __commonJS({
         }
       }
     };
-    Router9.prototype.use = function use(handler) {
+    Router10.prototype.use = function use(handler) {
       let offset = 0;
       let path2 = "/";
       if (typeof handler !== "function") {
@@ -20932,7 +20932,7 @@ var require_router = __commonJS({
       }
       return this;
     };
-    Router9.prototype.route = function route(path2) {
+    Router10.prototype.route = function route(path2) {
       const route2 = new Route(path2);
       const layer = new Layer(path2, {
         sensitive: this.caseSensitive,
@@ -20947,7 +20947,7 @@ var require_router = __commonJS({
       return route2;
     };
     methods.concat("all").forEach(function(method) {
-      Router9.prototype[method] = function(path2) {
+      Router10.prototype[method] = function(path2) {
         const route = this.route(path2);
         route[method].apply(route, slice.call(arguments, 1));
         return this;
@@ -21130,13 +21130,13 @@ var require_application = __commonJS({
     var compileTrust = require_utils3().compileTrust;
     var resolve = __require("node:path").resolve;
     var once = require_once();
-    var Router9 = require_router();
+    var Router10 = require_router();
     var slice = Array.prototype.slice;
     var flatten = Array.prototype.flat;
     var app2 = exports = module.exports = {};
     var trustProxyDefaultSymbol = "@@symbol:trust_proxy_default";
     app2.init = function init() {
-      var router9 = null;
+      var router10 = null;
       this.cache = /* @__PURE__ */ Object.create(null);
       this.engines = /* @__PURE__ */ Object.create(null);
       this.settings = /* @__PURE__ */ Object.create(null);
@@ -21145,13 +21145,13 @@ var require_application = __commonJS({
         configurable: true,
         enumerable: true,
         get: function getrouter() {
-          if (router9 === null) {
-            router9 = new Router9({
+          if (router10 === null) {
+            router10 = new Router10({
               caseSensitive: this.enabled("case sensitive routing"),
               strict: this.enabled("strict routing")
             });
           }
-          return router9;
+          return router10;
         }
       });
     };
@@ -21222,15 +21222,15 @@ var require_application = __commonJS({
       if (fns.length === 0) {
         throw new TypeError("app.use() requires a middleware function");
       }
-      var router9 = this.router;
+      var router10 = this.router;
       fns.forEach(function(fn2) {
         if (!fn2 || !fn2.handle || !fn2.set) {
-          return router9.use(path2, fn2);
+          return router10.use(path2, fn2);
         }
         debug(".use app under %s", path2);
         fn2.mountpath = path2;
         fn2.parent = this;
-        router9.use(path2, function mounted_app(req, res, next) {
+        router10.use(path2, function mounted_app(req, res, next) {
           var orig = req.app;
           fn2.handle(req, res, function(err) {
             Object.setPrototypeOf(req, orig.request);
@@ -23739,7 +23739,7 @@ var require_express = __commonJS({
     var EventEmitter = __require("node:events").EventEmitter;
     var mixin = require_merge_descriptors();
     var proto = require_application();
-    var Router9 = require_router();
+    var Router10 = require_router();
     var req = require_request();
     var res = require_response();
     exports = module.exports = createApplication;
@@ -23761,8 +23761,8 @@ var require_express = __commonJS({
     exports.application = proto;
     exports.request = req;
     exports.response = res;
-    exports.Route = Router9.Route;
-    exports.Router = Router9;
+    exports.Route = Router10.Route;
+    exports.Router = Router10;
     exports.json = bodyParser.json;
     exports.raw = bodyParser.raw;
     exports.static = require_serve_static();
@@ -42206,12 +42206,12 @@ var init_pglite = __esm({
 });
 
 // src/app.ts
-var import_express9 = __toESM(require_express2(), 1);
+var import_express10 = __toESM(require_express2(), 1);
 var import_cors = __toESM(require_lib3(), 1);
 var import_pino_http = __toESM(require_logger(), 1);
 
 // src/routes/index.ts
-var import_express8 = __toESM(require_express2(), 1);
+var import_express9 = __toESM(require_express2(), 1);
 
 // src/routes/attendance.ts
 var import_express = __toESM(require_express2(), 1);
@@ -46203,6 +46203,124 @@ var DeleteStudentParams = objectType({
   "studentId": coerce.number().int()
 });
 var DeleteStudentResponse = voidType();
+var GetTeachersQueryParams = objectType({
+  "search": coerce.string().optional()
+});
+var GetTeachersResponseItem = objectType({
+  "id": numberType().int(),
+  "name": stringType(),
+  "email": stringType(),
+  "phone": stringType(),
+  "subject": stringType(),
+  "department": stringType(),
+  "qualification": stringType(),
+  "avatarUrl": stringType().nullish(),
+  "classes": arrayType(objectType({
+    "id": numberType().int(),
+    "name": stringType(),
+    "grade": stringType(),
+    "section": stringType(),
+    "room": stringType(),
+    "studentCount": numberType().int()
+  })),
+  "studentCount": numberType().int()
+});
+var GetTeachersResponse = arrayType(GetTeachersResponseItem);
+var CreateTeacherBody = objectType({
+  "name": stringType().min(1),
+  "email": stringType().min(1),
+  "phone": stringType().optional(),
+  "subject": stringType().min(1),
+  "department": stringType().min(1),
+  "qualification": stringType().optional(),
+  "avatarUrl": stringType().nullish()
+});
+var CreateTeacherResponse = objectType({
+  "id": numberType().int(),
+  "name": stringType(),
+  "email": stringType(),
+  "phone": stringType(),
+  "subject": stringType(),
+  "department": stringType(),
+  "qualification": stringType(),
+  "avatarUrl": stringType().nullish(),
+  "classes": arrayType(objectType({
+    "id": numberType().int(),
+    "name": stringType(),
+    "grade": stringType(),
+    "section": stringType(),
+    "room": stringType(),
+    "studentCount": numberType().int()
+  })),
+  "studentCount": numberType().int()
+});
+var GetTeacherByIdParams = objectType({
+  "teacherId": coerce.number().int()
+});
+var GetTeacherByIdResponse = objectType({
+  "id": numberType().int(),
+  "name": stringType(),
+  "email": stringType(),
+  "phone": stringType(),
+  "subject": stringType(),
+  "department": stringType(),
+  "qualification": stringType(),
+  "avatarUrl": stringType().nullish(),
+  "classes": arrayType(objectType({
+    "id": numberType().int(),
+    "name": stringType(),
+    "grade": stringType(),
+    "section": stringType(),
+    "room": stringType(),
+    "studentCount": numberType().int()
+  })),
+  "studentCount": numberType().int(),
+  "students": arrayType(objectType({
+    "id": numberType().int(),
+    "name": stringType(),
+    "admissionNumber": stringType(),
+    "grade": stringType(),
+    "section": stringType(),
+    "className": stringType().nullish(),
+    "email": stringType(),
+    "phone": stringType().optional()
+  }))
+});
+var UpdateTeacherParams = objectType({
+  "teacherId": coerce.number().int()
+});
+var UpdateTeacherBody = objectType({
+  "name": stringType().min(1).optional(),
+  "email": stringType().min(1).optional(),
+  "phone": stringType().optional(),
+  "subject": stringType().min(1).optional(),
+  "department": stringType().min(1).optional(),
+  "qualification": stringType().optional(),
+  "avatarUrl": stringType().nullish()
+});
+var UpdateTeacherResponse = objectType({
+  "id": numberType().int(),
+  "name": stringType(),
+  "email": stringType(),
+  "phone": stringType(),
+  "subject": stringType(),
+  "department": stringType(),
+  "qualification": stringType(),
+  "avatarUrl": stringType().nullish(),
+  "classes": arrayType(objectType({
+    "id": numberType().int(),
+    "name": stringType(),
+    "grade": stringType(),
+    "section": stringType(),
+    "room": stringType(),
+    "studentCount": numberType().int()
+  })),
+  "studentCount": numberType().int()
+});
+var DeleteTeacherParams = objectType({
+  "teacherId": coerce.number().int()
+});
+var DeleteTeacherResponse = voidType();
 var GetStaffResponseItem = objectType({
   "id": numberType().int(),
   "name": stringType(),
@@ -46848,9 +46966,11 @@ __export(schema_exports, {
   insertPerformanceSchema: () => insertPerformanceSchema,
   insertStaffSchema: () => insertStaffSchema,
   insertStudentSchema: () => insertStudentSchema,
+  insertTeacherSchema: () => insertTeacherSchema,
   performanceTable: () => performanceTable,
   staffTable: () => staffTable,
-  studentsTable: () => studentsTable
+  studentsTable: () => studentsTable,
+  teachersTable: () => teachersTable
 });
 
 // ../../node_modules/.pnpm/zod@3.25.76/node_modules/zod/v4/classic/external.js
@@ -58264,12 +58384,28 @@ var insertAttendanceSchema = createInsertSchema(attendanceTable).omit({ id: true
 
 // ../../lib/db/src/schema/classes.ts
 init_pg_core();
+
+// ../../lib/db/src/schema/teachers.ts
+init_pg_core();
+var teachersTable = pgTable("school_teachers", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  email: text("email").notNull().unique(),
+  phone: text("phone").notNull().default(""),
+  subject: text("subject").notNull(),
+  department: text("department").notNull(),
+  qualification: text("qualification").notNull().default(""),
+  avatarUrl: text("avatar_url")
+});
+var insertTeacherSchema = createInsertSchema(teachersTable).omit({ id: true });
+
+// ../../lib/db/src/schema/classes.ts
 var classesTable = pgTable("school_classes", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
   grade: text("grade").notNull(),
   section: text("section").notNull(),
-  teacherId: integer("teacher_id"),
+  teacherId: integer("teacher_id").references(() => teachersTable.id, { onDelete: "set null" }),
   room: text("room").notNull().default("")
 });
 var insertClassSchema = createInsertSchema(classesTable).omit({ id: true });
@@ -58357,24 +58493,101 @@ var insertStaffSchema = createInsertSchema(staffTable).omit({ id: true });
 
 // ../../lib/db/src/seed.ts
 async function seedDatabase(db2) {
+  const [teacherCount] = await db2.select({ value: count() }).from(teachersTable);
+  let insertedTeachers = [];
+  if (!teacherCount || Number(teacherCount.value) === 0) {
+    const teacherData = [
+      {
+        name: "Elena Rostova",
+        email: "elena.rostova@willowcreek.edu",
+        phone: "+91 98765 11001",
+        subject: "Physics & Natural Sciences",
+        department: "Science",
+        qualification: "M.Sc. Physics, B.Ed (10+ yrs exp)",
+        avatarUrl: null
+      },
+      {
+        name: "Marcus Vance",
+        email: "marcus.vance@willowcreek.edu",
+        phone: "+91 98765 11002",
+        subject: "Pure & Applied Mathematics",
+        department: "Mathematics",
+        qualification: "M.Sc. Applied Mathematics",
+        avatarUrl: null
+      },
+      {
+        name: "Sarah Jenkins",
+        email: "sarah.jenkins@willowcreek.edu",
+        phone: "+91 98765 11003",
+        subject: "World History & Literature",
+        department: "Humanities",
+        qualification: "M.A. English & History",
+        avatarUrl: null
+      },
+      {
+        name: "David O'Connor",
+        email: "david.oconnor@willowcreek.edu",
+        phone: "+91 98765 11004",
+        subject: "Physical Education & Health",
+        department: "Athletics",
+        qualification: "B.P.Ed, Certified Athletics Coach",
+        avatarUrl: null
+      },
+      {
+        name: "Amina Patel",
+        email: "amina.patel@willowcreek.edu",
+        phone: "+91 98765 11005",
+        subject: "Fine Arts & Studio Design",
+        department: "Creative Arts",
+        qualification: "M.F.A, Visual Arts Specialization",
+        avatarUrl: null
+      },
+      {
+        name: "Robert Sterling",
+        email: "robert.sterling@willowcreek.edu",
+        phone: "+91 98765 11006",
+        subject: "Computer Science & Robotics",
+        department: "Technology",
+        qualification: "B.Tech, M.Tech Computer Engineering",
+        avatarUrl: null
+      }
+    ];
+    insertedTeachers = await db2.insert(teachersTable).values(teacherData).returning();
+    const existingClasses = await db2.select().from(classesTable);
+    if (existingClasses.length > 0) {
+      if (existingClasses[0] && insertedTeachers[0]) {
+        await db2.update(classesTable).set({ teacherId: insertedTeachers[0].id }).where(eq(classesTable.id, existingClasses[0].id));
+      }
+      if (existingClasses[1] && insertedTeachers[1]) {
+        await db2.update(classesTable).set({ teacherId: insertedTeachers[1].id }).where(eq(classesTable.id, existingClasses[1].id));
+      }
+      if (existingClasses[2] && insertedTeachers[4]) {
+        await db2.update(classesTable).set({ teacherId: insertedTeachers[4].id }).where(eq(classesTable.id, existingClasses[2].id));
+      }
+      if (existingClasses[3] && insertedTeachers[2]) {
+        await db2.update(classesTable).set({ teacherId: insertedTeachers[2].id }).where(eq(classesTable.id, existingClasses[3].id));
+      }
+    }
+  }
   const [studentCount] = await db2.select({ value: count() }).from(studentsTable);
   if (studentCount && Number(studentCount.value) > 0) {
     return;
   }
+  if (insertedTeachers.length === 0) {
+    insertedTeachers = await db2.select().from(teachersTable);
+  }
   const staffData = [
     { name: "Dr. Alistair Finch", role: "Principal", email: "principal@willowcreek.edu", department: "Administration" },
-    { name: "Elena Rostova", role: "Head of Science", email: "elena.rostova@willowcreek.edu", department: "Science" },
-    { name: "Marcus Vance", role: "Mathematics Lead", email: "marcus.vance@willowcreek.edu", department: "Mathematics" },
-    { name: "Sarah Jenkins", role: "Humanities & History", email: "sarah.jenkins@willowcreek.edu", department: "Humanities" },
-    { name: "David O'Connor", role: "Athletics Director", email: "david.oconnor@willowcreek.edu", department: "Athletics" },
-    { name: "Amina Patel", role: "Art & Music Director", email: "amina.patel@willowcreek.edu", department: "Arts" }
+    { name: "Rachel Adams", role: "Head Librarian", email: "rachel.adams@willowcreek.edu", department: "Library" },
+    { name: "Suresh Pillai", role: "Laboratory Coordinator", email: "suresh.pillai@willowcreek.edu", department: "Science" },
+    { name: "Miriam Vance", role: "Student Counselor", email: "miriam.vance@willowcreek.edu", department: "Student Welfare" }
   ];
   const insertedStaff = await db2.insert(staffTable).values(staffData).returning();
   const classData = [
-    { name: "Cedar Room", grade: "9", section: "A", teacherId: insertedStaff[1]?.id ?? null, room: "Building A - 101" },
-    { name: "Maple Room", grade: "10", section: "B", teacherId: insertedStaff[2]?.id ?? null, room: "Building B - 204" },
-    { name: "Oak Studio", grade: "11", section: "A", teacherId: insertedStaff[5]?.id ?? null, room: "Arts Wing - 12" },
-    { name: "Willow Lab", grade: "12", section: "Advanced", teacherId: insertedStaff[3]?.id ?? null, room: "Science Block - 3" }
+    { name: "Cedar Room", grade: "9", section: "A", teacherId: insertedTeachers[0]?.id ?? null, room: "Building A - 101" },
+    { name: "Maple Room", grade: "10", section: "B", teacherId: insertedTeachers[1]?.id ?? null, room: "Building B - 204" },
+    { name: "Oak Studio", grade: "11", section: "A", teacherId: insertedTeachers[4]?.id ?? null, room: "Arts Wing - 12" },
+    { name: "Willow Lab", grade: "12", section: "Advanced", teacherId: insertedTeachers[2]?.id ?? null, room: "Science Block - 3" }
   ];
   const insertedClasses = await db2.insert(classesTable).values(classData).returning();
   const studentData = [
@@ -58546,6 +58759,16 @@ CREATE TABLE IF NOT EXISTS "school_attendance" (
 	"attendance_date" date NOT NULL,
 	"status" text NOT NULL,
 	"note" text
+);
+CREATE TABLE IF NOT EXISTS "school_teachers" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"name" text NOT NULL,
+	"email" text NOT NULL UNIQUE,
+	"phone" text DEFAULT '' NOT NULL,
+	"subject" text NOT NULL,
+	"department" text NOT NULL,
+	"qualification" text DEFAULT '' NOT NULL,
+	"avatar_url" text
 );
 CREATE TABLE IF NOT EXISTS "school_classes" (
 	"id" serial PRIMARY KEY NOT NULL,
@@ -59054,9 +59277,9 @@ async function getClassList() {
     grade: classesTable.grade,
     section: classesTable.section,
     teacherId: classesTable.teacherId,
-    teacherName: staffTable.name,
+    teacherName: teachersTable.name,
     room: classesTable.room
-  }).from(classesTable).leftJoin(staffTable, eq(classesTable.teacherId, staffTable.id)).orderBy(classesTable.grade, classesTable.section);
+  }).from(classesTable).leftJoin(teachersTable, eq(classesTable.teacherId, teachersTable.id)).orderBy(classesTable.grade, classesTable.section);
   const students = rows.length ? await db.select({ id: studentsTable.id, classId: studentsTable.classId }).from(studentsTable).where(inArray(studentsTable.classId, rows.map((item) => item.id))) : [];
   return rows.map((classRow) => {
     const mapped = students.filter((student) => student.classId === classRow.id);
@@ -59286,16 +59509,168 @@ router7.post("/students/:studentId/performance", async (req, res) => {
 });
 var students_default = router7;
 
-// src/routes/index.ts
+// src/routes/teachers.ts
+var import_express8 = __toESM(require_express2(), 1);
 var router8 = (0, import_express8.Router)();
-router8.use(health_default);
-router8.use(school_default);
-router8.use(students_default);
-router8.use(attendance_default);
-router8.use(fees_default);
-router8.use(events_default);
-router8.use(homepage_media_default);
-var routes_default = router8;
+async function getTeacherList(where) {
+  const teachers = await db.select().from(teachersTable).where(where).orderBy(teachersTable.name);
+  if (!teachers.length) return [];
+  const teacherIds = teachers.map((t) => t.id);
+  const classes = await db.select({
+    id: classesTable.id,
+    name: classesTable.name,
+    grade: classesTable.grade,
+    section: classesTable.section,
+    room: classesTable.room,
+    teacherId: classesTable.teacherId
+  }).from(classesTable).where(inArray(classesTable.teacherId, teacherIds));
+  const classIds = classes.map((c) => c.id);
+  const students = classIds.length ? await db.select({
+    id: studentsTable.id,
+    classId: studentsTable.classId
+  }).from(studentsTable).where(inArray(studentsTable.classId, classIds)) : [];
+  return teachers.map((teacher) => {
+    const teacherClasses = classes.filter((c) => c.teacherId === teacher.id).map((c) => {
+      const classStudents = students.filter((s) => s.classId === c.id);
+      return {
+        id: c.id,
+        name: c.name,
+        grade: c.grade,
+        section: c.section,
+        room: c.room,
+        studentCount: classStudents.length
+      };
+    });
+    const teacherClassIds = new Set(teacherClasses.map((c) => c.id));
+    const teacherStudents = students.filter(
+      (s) => s.classId !== null && teacherClassIds.has(s.classId)
+    );
+    return {
+      id: teacher.id,
+      name: teacher.name,
+      email: teacher.email,
+      phone: teacher.phone,
+      subject: teacher.subject,
+      department: teacher.department,
+      qualification: teacher.qualification,
+      avatarUrl: teacher.avatarUrl ?? null,
+      classes: teacherClasses,
+      studentCount: teacherStudents.length
+    };
+  });
+}
+router8.get("/teachers", async (req, res) => {
+  const params = GetTeachersQueryParams.safeParse(req.query);
+  if (!params.success) {
+    res.status(400).json({ error: params.error.message });
+    return;
+  }
+  const search = params.data?.search?.trim();
+  const where = search ? or(
+    ilike(teachersTable.name, `%${search}%`),
+    ilike(teachersTable.subject, `%${search}%`),
+    ilike(teachersTable.department, `%${search}%`),
+    ilike(teachersTable.email, `%${search}%`)
+  ) : void 0;
+  const result = await getTeacherList(where);
+  res.json(GetTeachersResponse.parse(result));
+});
+router8.post("/teachers", async (req, res) => {
+  const parsed = CreateTeacherBody.safeParse(req.body);
+  if (!parsed.success) {
+    res.status(400).json({ error: parsed.error.message });
+    return;
+  }
+  const [created] = await db.insert(teachersTable).values({
+    ...parsed.data,
+    phone: parsed.data.phone ?? "",
+    qualification: parsed.data.qualification ?? "",
+    avatarUrl: parsed.data.avatarUrl ?? null
+  }).returning();
+  const [teacher] = await getTeacherList(eq(teachersTable.id, created.id));
+  res.status(201).json(CreateTeacherResponse.parse(teacher));
+});
+router8.get("/teachers/:teacherId", async (req, res) => {
+  const params = GetTeacherByIdParams.safeParse(req.params);
+  if (!params.success) {
+    res.status(400).json({ error: params.error.message });
+    return;
+  }
+  const [teacher] = await getTeacherList(eq(teachersTable.id, params.data.teacherId));
+  if (!teacher) {
+    res.status(404).json({ error: "Teacher not found" });
+    return;
+  }
+  const classIds = teacher.classes.map((c) => c.id);
+  const students = classIds.length ? await db.select({
+    id: studentsTable.id,
+    name: studentsTable.name,
+    admissionNumber: studentsTable.admissionNumber,
+    grade: studentsTable.grade,
+    section: studentsTable.section,
+    email: studentsTable.email,
+    phone: studentsTable.phone,
+    classId: studentsTable.classId
+  }).from(studentsTable).where(inArray(studentsTable.classId, classIds)).orderBy(studentsTable.name) : [];
+  const classMap = new Map(teacher.classes.map((c) => [c.id, c.name]));
+  const formattedStudents = students.map((s) => ({
+    id: s.id,
+    name: s.name,
+    admissionNumber: s.admissionNumber,
+    grade: s.grade,
+    section: s.section,
+    className: s.classId ? classMap.get(s.classId) ?? null : null,
+    email: s.email,
+    phone: s.phone
+  }));
+  res.json(
+    GetTeacherByIdResponse.parse({
+      ...teacher,
+      students: formattedStudents
+    })
+  );
+});
+router8.patch("/teachers/:teacherId", async (req, res) => {
+  const params = UpdateTeacherParams.safeParse(req.params);
+  const parsed = UpdateTeacherBody.safeParse(req.body);
+  if (!params.success || !parsed.success) {
+    res.status(400).json({ error: params.error?.message ?? parsed.error?.message });
+    return;
+  }
+  const [updated] = await db.update(teachersTable).set(parsed.data).where(eq(teachersTable.id, params.data.teacherId)).returning();
+  if (!updated) {
+    res.status(404).json({ error: "Teacher not found" });
+    return;
+  }
+  const [teacher] = await getTeacherList(eq(teachersTable.id, updated.id));
+  res.json(UpdateTeacherResponse.parse(teacher));
+});
+router8.delete("/teachers/:teacherId", async (req, res) => {
+  const params = DeleteTeacherParams.safeParse(req.params);
+  if (!params.success) {
+    res.status(400).json({ error: params.error.message });
+    return;
+  }
+  const [deleted] = await db.delete(teachersTable).where(eq(teachersTable.id, params.data.teacherId)).returning({ id: teachersTable.id });
+  if (!deleted) {
+    res.status(404).json({ error: "Teacher not found" });
+    return;
+  }
+  res.sendStatus(204);
+});
+var teachers_default = router8;
+
+// src/routes/index.ts
+var router9 = (0, import_express9.Router)();
+router9.use(health_default);
+router9.use(school_default);
+router9.use(students_default);
+router9.use(teachers_default);
+router9.use(attendance_default);
+router9.use(fees_default);
+router9.use(events_default);
+router9.use(homepage_media_default);
+var routes_default = router9;
 
 // src/lib/logger.ts
 var import_pino = __toESM(require_pino(), 1);
@@ -59316,7 +59691,7 @@ var logger = (0, import_pino.default)({
 });
 
 // src/app.ts
-var app = (0, import_express9.default)();
+var app = (0, import_express10.default)();
 app.use(
   (0, import_pino_http.default)({
     logger,
@@ -59337,8 +59712,8 @@ app.use(
   })
 );
 app.use((0, import_cors.default)());
-app.use(import_express9.default.json());
-app.use(import_express9.default.urlencoded({ extended: true }));
+app.use(import_express10.default.json());
+app.use(import_express10.default.urlencoded({ extended: true }));
 app.use("/api", routes_default);
 var app_default = app;
 

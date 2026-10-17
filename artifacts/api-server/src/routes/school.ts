@@ -20,6 +20,7 @@ import {
   feesTable,
   staffTable,
   studentsTable,
+  teachersTable,
 } from "@workspace/db";
 
 const router: IRouter = Router();
@@ -108,11 +109,11 @@ async function getClassList() {
       grade: classesTable.grade,
       section: classesTable.section,
       teacherId: classesTable.teacherId,
-      teacherName: staffTable.name,
+      teacherName: teachersTable.name,
       room: classesTable.room,
     })
     .from(classesTable)
-    .leftJoin(staffTable, eq(classesTable.teacherId, staffTable.id))
+    .leftJoin(teachersTable, eq(classesTable.teacherId, teachersTable.id))
     .orderBy(classesTable.grade, classesTable.section);
   const students = rows.length
     ? await db

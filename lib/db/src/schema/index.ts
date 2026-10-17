@@ -6,3 +6,4 @@ export * from "./homepage-media";
 export * from "./performance";
 export * from "./staff";
 export * from "./students";
+export * from "./teachers";

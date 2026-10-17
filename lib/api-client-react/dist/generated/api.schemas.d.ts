@@ -56,6 +56,88 @@ export interface StudentUpdate {
     /** @nullable */
     classId?: number | null;
 }
+export type TeacherClassesItem = {
+    id: number;
+    name: string;
+    grade: string;
+    section: string;
+    room: string;
+    studentCount: number;
+};
+export interface Teacher {
+    id: number;
+    name: string;
+    email: string;
+    phone: string;
+    subject: string;
+    department: string;
+    qualification: string;
+    /** @nullable */
+    avatarUrl?: string | null;
+    classes: TeacherClassesItem[];
+    studentCount: number;
+}
+export interface TeacherInput {
+    /** @minLength 1 */
+    name: string;
+    /** @minLength 1 */
+    email: string;
+    phone?: string;
+    /** @minLength 1 */
+    subject: string;
+    /** @minLength 1 */
+    department: string;
+    qualification?: string;
+    /** @nullable */
+    avatarUrl?: string | null;
+}
+export interface TeacherUpdate {
+    /** @minLength 1 */
+    name?: string;
+    /** @minLength 1 */
+    email?: string;
+    phone?: string;
+    /** @minLength 1 */
+    subject?: string;
+    /** @minLength 1 */
+    department?: string;
+    qualification?: string;
+    /** @nullable */
+    avatarUrl?: string | null;
+}
+export type TeacherDetailClassesItem = {
+    id: number;
+    name: string;
+    grade: string;
+    section: string;
+    room: string;
+    studentCount: number;
+};
+export type TeacherDetailStudentsItem = {
+    id: number;
+    name: string;
+    admissionNumber: string;
+    grade: string;
+    section: string;
+    /** @nullable */
+    className?: string | null;
+    email: string;
+    phone?: string;
+};
+export interface TeacherDetail {
+    id: number;
+    name: string;
+    email: string;
+    phone: string;
+    subject: string;
+    department: string;
+    qualification: string;
+    /** @nullable */
+    avatarUrl?: string | null;
+    classes: TeacherDetailClassesItem[];
+    studentCount: number;
+    students: TeacherDetailStudentsItem[];
+}
 export interface Staff {
     id: number;
     name: string;
@@ -307,6 +389,9 @@ export interface SchoolOverview {
 export type GetStudentsParams = {
     search?: string;
     classId?: number;
+};
+export type GetTeachersParams = {
+    search?: string;
 };
 export type GetAttendanceParams = {
     date: string;

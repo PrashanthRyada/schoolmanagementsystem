@@ -6,21 +6,23 @@ import {
   Activity, ArrowDownRight, ArrowLeft, ArrowRight, Bell, BookOpen, CalendarDays, Check,
   ChevronDown, ChevronLeft, ChevronRight, CircleDollarSign, ClipboardCheck, Clock3, GraduationCap,
   ImagePlus, LayoutDashboard, Menu, MoreHorizontal, Pencil, Plus, Search, Settings2, Trash2,
-  Users, WalletCards, X,
+  UserCheck, Users, WalletCards, X,
 } from 'lucide-react';
 import {
   getGetAttendanceQueryKey, getGetClassesQueryKey, getGetEventsQueryKey, getGetFeesQueryKey,
   getGetHomepageMediaQueryKey, getGetSchoolOverviewQueryKey, getGetStaffQueryKey,
-  getGetStudentPerformanceQueryKey, getGetStudentsQueryKey, useAddStudentPerformance,
+  getGetStudentPerformanceQueryKey, getGetStudentsQueryKey, getGetTeachersQueryKey,
+  getGetTeacherByIdQueryKey, useAddStudentPerformance,
   useCreateClass, useCreateEvent, useCreateFee, useCreateHomepageMedia, useCreateStudent,
-  useDeleteClass, useDeleteEvent, useDeleteFee, useDeleteHomepageMedia, useDeleteStudent,
-  useGetAttendance, useGetClasses, useGetEvents, useGetFees, useGetHomepageMedia,
-  useGetSchoolOverview, useGetStaff, useGetStudentPerformance, useGetStudents,
-  useMarkAttendance, useUpdateClass, useUpdateEvent, useUpdateFee, useUpdateHomepageMedia,
-  useUpdateStudent,
+  useCreateTeacher, useDeleteClass, useDeleteEvent, useDeleteFee, useDeleteHomepageMedia,
+  useDeleteStudent, useDeleteTeacher, useGetAttendance, useGetClasses, useGetEvents, useGetFees,
+  useGetHomepageMedia, useGetSchoolOverview, useGetStaff, useGetStudentPerformance, useGetStudents,
+  useGetTeacherById, useGetTeachers, useMarkAttendance, useUpdateClass, useUpdateEvent,
+  useUpdateFee, useUpdateHomepageMedia, useUpdateStudent, useUpdateTeacher,
 } from '@workspace/api-client-react';
 import type {
   AttendanceRecord, FeeInvoice, HomepageMedia, SchoolClass, SchoolEvent, Student,
+  Teacher, TeacherDetail as TeacherDetailType,
 } from '@workspace/api-client-react';
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import NotFound from '@/pages/not-found';
@@ -41,6 +43,7 @@ function Shell({ children }: { children: ReactNode }) {
     { label: 'Overview', href: '/', icon: LayoutDashboard },
     { label: 'Attendance', href: '/attendance', icon: ClipboardCheck },
     { label: 'Students', href: '/students', icon: GraduationCap },
+    { label: 'Teachers', href: '/teachers', icon: UserCheck },
     { label: 'Classes', href: '/classes', icon: BookOpen },
     { label: 'Fee follow-up', href: '/fees', icon: WalletCards },
     { label: 'Events', href: '/events', icon: CalendarDays },
@@ -51,15 +54,15 @@ function Shell({ children }: { children: ReactNode }) {
     <aside className={`sidebar ${mobileNav ? 'open' : ''}`}>
       <Link href="/" className="brand" onClick={() => setMobileNav(false)}>
         <span className="brand-mark"><GraduationCap size={21} /></span>
-        <span><span className="brand-name">Willow Creek</span><span className="brand-sub">School office</span></span>
+        <span><span className="brand-name">Krishnaveni</span><span className="brand-sub">School office</span></span>
       </Link>
       <div className="nav-label">Workspace</div>
       <nav className="nav-list">{nav.map(({ label, href, icon: Icon }) => <Link key={href} href={href} onClick={() => setMobileNav(false)} className={`nav-item ${path === href ? 'active' : ''}`} data-testid={`link-nav-${label.toLowerCase().replaceAll(' ', '-')}`}><Icon size={17} strokeWidth={1.8} /><span>{label}</span>{path === href && <span style={{ marginLeft: 'auto', width: 5, height: 5, borderRadius: '50%', background: '#45604b' }} />}</Link>)}</nav>
-      <div className="sidebar-bottom"><div className="school-mini">Willow Creek Academy</div><div className="school-year">Academic year {academicYear}</div></div>
+      <div className="sidebar-bottom"><div className="school-mini">Krishnaveni Academy</div><div className="school-year">Academic year {academicYear}</div></div>
     </aside>
     <main className="main">
       <header className="topbar">
-        <div style={{ display: 'flex', alignItems: 'center', gap: 13 }}><button className="icon-button hamburger" onClick={() => setMobileNav(true)} aria-label="Open menu"><Menu size={18} /></button><div className="crumb">Willow Creek Academy <span style={{ padding: '0 8px', color: '#bdc3ba' }}>/</span><strong>{nav.find((item) => item.href === path)?.label || 'Page'}</strong></div></div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 13 }}><button className="icon-button hamburger" onClick={() => setMobileNav(true)} aria-label="Open menu"><Menu size={18} /></button><div className="crumb">Krishnaveni Academy <span style={{ padding: '0 8px', color: '#bdc3ba' }}>/</span><strong>{nav.find((item) => item.href === path)?.label || 'Page'}</strong></div></div>
         <div className="top-actions"><button className="icon-button" aria-label="Notifications"><Bell size={17} /></button><div className="profile"><div className="profile-avatar">WC</div><div className="profile-text"><b>School office</b><span>Administrator</span></div><ChevronDown size={14} color="#829087" /></div></div>
       </header>
       {children}
@@ -96,7 +99,7 @@ function Carousel() {
   const shift = (direction: number) => setIndex((current) => (current + direction + slides.length) % slides.length);
   return <section className="card carousel" aria-label="School homepage media">
     {active.mediaType === 'video' ? <video key={active.id} src={active.url} className="slide-image" autoPlay muted loop playsInline /> : <img key={active.id} src={active.url} className="slide-image" alt={active.title} />}
-    <div className="slide-shade" /><div className="carousel-content"><div className="carousel-kicker">Life at Willow Creek</div><h2 className="carousel-title">{active.title}</h2><p className="carousel-caption">{active.caption}</p></div>
+    <div className="slide-shade" /><div className="carousel-content"><div className="carousel-kicker">Life at Krishnaveni</div><h2 className="carousel-title">{active.title}</h2><p className="carousel-caption">{active.caption}</p></div>
     <div className="carousel-controls"><div className="carousel-dots">{slides.map((slide, i) => <button key={slide.id} className={`carousel-dot ${i === index ? 'active' : ''}`} aria-label={`Show slide ${i + 1}`} onClick={() => setIndex(i)} />)}</div><button className="carousel-control" aria-label="Previous slide" onClick={() => shift(-1)}><ChevronLeft size={17} /></button><button className="carousel-control" aria-label="Next slide" onClick={() => shift(1)}><ChevronRight size={17} /></button></div>
   </section>;
 }
@@ -217,12 +220,368 @@ function StudentDetail({ student, back }: { student: Student; back: () => void }
   </div></>;
 }
 
+function TeachersPage() {
+  const client = useQueryClient();
+  const [search, setSearch] = useState('');
+  const [selected, setSelected] = useState<Teacher | null>(null);
+  const [modal, setModal] = useState(false);
+  const [editing, setEditing] = useState<Teacher | null>(null);
+  const teachers = useGetTeachers(search ? { search } : undefined);
+  const create = useCreateTeacher();
+  const update = useUpdateTeacher();
+  const remove = useDeleteTeacher();
+
+  const invalidate = () => {
+    void client.invalidateQueries({ queryKey: getGetTeachersQueryKey() });
+    void client.invalidateQueries({ queryKey: getGetClassesQueryKey() });
+  };
+
+  const openEdit = (teacher: Teacher) => {
+    setEditing(teacher);
+    setModal(true);
+  };
+
+  const save = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const values = Object.fromEntries(new FormData(event.currentTarget).entries());
+    const input = {
+      name: String(values.name),
+      email: String(values.email),
+      phone: String(values.phone || ''),
+      subject: String(values.subject),
+      department: String(values.department),
+      qualification: String(values.qualification || ''),
+      avatarUrl: null,
+    };
+    if (editing) {
+      update.mutate({ teacherId: editing.id, data: input }, { onSuccess: () => { invalidate(); setModal(false); } });
+    } else {
+      create.mutate({ data: input }, { onSuccess: () => { invalidate(); setModal(false); } });
+    }
+  };
+
+  const deleteOne = (teacher: Teacher) => {
+    if (window.confirm(`Remove ${teacher.name} from teachers? Assigned classes will become unassigned.`)) {
+      remove.mutate({ teacherId: teacher.id }, { onSuccess: () => { invalidate(); if (selected?.id === teacher.id) setSelected(null); } });
+    }
+  };
+
+  const teacherList = teachers.data || [];
+  const totalClasses = teacherList.reduce((acc, t) => acc + t.classes.length, 0);
+  const totalStudents = teacherList.reduce((acc, t) => acc + t.studentCount, 0);
+
+  return (
+    <>
+      <Head
+        eyebrow="Faculty & Mentorship"
+        title="Teachers"
+        subtitle="Manage educators, track assigned classrooms, and mentor student cohorts."
+        action={
+          <button className="btn" onClick={() => { setEditing(null); setModal(true); }}>
+            <Plus size={15} /> Add teacher
+          </button>
+        }
+      />
+
+      {selected ? (
+        <TeacherDetail teacherId={selected.id} back={() => setSelected(null)} />
+      ) : (
+        <>
+          <div className="grid stats-grid" style={{ gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', marginBottom: 14 }}>
+            <article className="card stat-card">
+              <div className="stat-top"><span>Teaching faculty</span><span className="stat-icon"><GraduationCap size={16} /></span></div>
+              <div className="stat-value">{teachers.isLoading ? '—' : teacherList.length}</div>
+              <div className="stat-foot">Across all subject areas</div>
+            </article>
+            <article className="card stat-card">
+              <div className="stat-top"><span>Assigned classes</span><span className="stat-icon"><BookOpen size={16} /></span></div>
+              <div className="stat-value">{teachers.isLoading ? '—' : totalClasses}</div>
+              <div className="stat-foot">Classrooms mentored</div>
+            </article>
+            <article className="card stat-card">
+              <div className="stat-top"><span>Students guided</span><span className="stat-icon"><Users size={16} /></span></div>
+              <div className="stat-value">{teachers.isLoading ? '—' : totalStudents}</div>
+              <div className="stat-foot">Enrolled across class cohorts</div>
+            </article>
+          </div>
+
+          <div className="card" style={{ padding: 14, marginBottom: 14 }}>
+            <div className="toolbar">
+              <div className="search-wrap">
+                <Search size={15} />
+                <input
+                  className="field"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  placeholder="Search name, subject, or department"
+                  data-testid="input-teacher-search"
+                />
+              </div>
+              <span style={{ color: '#829087', fontSize: 11 }}>{teacherList.length} teachers</span>
+            </div>
+          </div>
+
+          {teachers.isLoading ? (
+            <div className="skeleton" style={{ height: 260 }} />
+          ) : teachers.isError ? (
+            <LoadError onRetry={() => void teachers.refetch()} />
+          ) : (
+            <div className="card table-card">
+              <div className="table-card-head">
+                <div>
+                  <h2 className="section-title">Teacher directory</h2>
+                  <p className="section-note" style={{ marginBottom: 0 }}>
+                    Select a teacher to view their assigned classes and student roster.
+                  </p>
+                </div>
+              </div>
+              {teacherList.length ? (
+                <div className="table-wrap">
+                  <table className="data-table">
+                    <thead>
+                      <tr>
+                        <th>Teacher</th>
+                        <th>Subject & Dept</th>
+                        <th>Assigned Classes</th>
+                        <th>Students</th>
+                        <th>Contact</th>
+                        <th>Manage</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {teacherList.map((teacher) => (
+                        <tr key={teacher.id}>
+                          <td>
+                            <button
+                              onClick={() => setSelected(teacher)}
+                              style={{ padding: 0, border: 0, background: 'transparent', textAlign: 'left' }}
+                            >
+                              <div className="person">
+                                <Avatar name={teacher.name} src={teacher.avatarUrl} />
+                                <div>
+                                  <b>{teacher.name}</b>
+                                  <small>{teacher.qualification || 'Educator'}</small>
+                                </div>
+                              </div>
+                            </button>
+                          </td>
+                          <td>
+                            <b>{teacher.subject}</b>
+                            <small style={{ display: 'block', color: '#879189' }}>{teacher.department}</small>
+                          </td>
+                          <td>
+                            {teacher.classes.length ? (
+                              <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap' }}>
+                                {teacher.classes.map((cls) => (
+                                  <span className="pill active" key={cls.id}>
+                                    {cls.name} ({cls.studentCount})
+                                  </span>
+                                ))}
+                              </div>
+                            ) : (
+                              <span style={{ color: '#97a39a', fontSize: 11 }}>No class assigned</span>
+                            )}
+                          </td>
+                          <td>
+                            <span className="pill" style={{ background: '#eaf1ea', color: '#2d5440', fontWeight: 600 }}>
+                              {teacher.studentCount} students
+                            </span>
+                          </td>
+                          <td>
+                            <div>{teacher.email}</div>
+                            {teacher.phone && <small style={{ color: '#879189' }}>{teacher.phone}</small>}
+                          </td>
+                          <td>
+                            <RowActions onEdit={() => openEdit(teacher)} onDelete={() => deleteOne(teacher)} />
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ) : (
+                <Empty title="No teachers found" detail={search ? 'Try adjusting your search query.' : 'Add your first teacher to start building the faculty directory.'} />
+              )}
+            </div>
+          )}
+        </>
+      )}
+
+      {modal && (
+        <Modal title={editing ? 'Edit teacher profile' : 'Add new teacher'} close={() => setModal(false)}>
+          <form onSubmit={save}>
+            <div className="form-grid">
+              <Field label="Full name">
+                <input name="name" required defaultValue={editing?.name} placeholder="e.g. Elena Rostova" />
+              </Field>
+              <Field label="Email">
+                <input name="email" type="email" required defaultValue={editing?.email} placeholder="elena.rostova@school.edu" />
+              </Field>
+              <Field label="Subject / Specialization">
+                <input name="subject" required defaultValue={editing?.subject} placeholder="e.g. Physics & Chemistry" />
+              </Field>
+              <Field label="Department">
+                <input name="department" required defaultValue={editing?.department} placeholder="e.g. Science" />
+              </Field>
+              <Field label="Phone">
+                <input name="phone" defaultValue={editing?.phone} placeholder="+91 98765 00000" />
+              </Field>
+              <Field label="Qualification">
+                <input name="qualification" defaultValue={editing?.qualification} placeholder="e.g. M.Sc, B.Ed" />
+              </Field>
+            </div>
+            <div className="modal-actions">
+              <button type="button" className="btn secondary" onClick={() => setModal(false)}>Cancel</button>
+              <button className="btn" disabled={create.isPending || update.isPending}>
+                {editing ? 'Save changes' : 'Add teacher'}
+              </button>
+            </div>
+          </form>
+        </Modal>
+      )}
+    </>
+  );
+}
+
+function TeacherDetail({ teacherId, back }: { teacherId: number; back: () => void }) {
+  const query = useGetTeacherById(teacherId);
+  const teacher = query.data;
+
+  return (
+    <>
+      <button className="btn ghost small" onClick={back} style={{ marginBottom: 14 }}>
+        <ArrowLeft size={14} /> Back to teachers
+      </button>
+
+      {query.isLoading ? (
+        <div className="skeleton" style={{ height: 300 }} />
+      ) : query.isError || !teacher ? (
+        <LoadError onRetry={() => void query.refetch()} />
+      ) : (
+        <div className="student-detail">
+          <aside className="card student-profile-card">
+            <div className="student-profile-top">
+              <div className="student-big-avatar">
+                {teacher.avatarUrl ? (
+                  <img src={teacher.avatarUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                ) : (
+                  initials(teacher.name)
+                )}
+              </div>
+              <h2>{teacher.name}</h2>
+              <p>{teacher.subject} · {teacher.department}</p>
+            </div>
+            <div className="student-facts">
+              <div className="student-fact">
+                <span>Qualification</span>
+                <b>{teacher.qualification || 'Faculty Member'}</b>
+              </div>
+              <div className="student-fact">
+                <span>Classes Led</span>
+                <b>{teacher.classes.length} classes</b>
+              </div>
+              <div className="student-fact">
+                <span>Students Guided</span>
+                <b>{teacher.studentCount} students</b>
+              </div>
+              <div className="student-fact">
+                <span>Email</span>
+                <b>{teacher.email}</b>
+              </div>
+              <div className="student-fact">
+                <span>Phone</span>
+                <b>{teacher.phone || 'Not provided'}</b>
+              </div>
+            </div>
+          </aside>
+
+          <div className="grid" style={{ gap: 15, alignContent: 'start' }}>
+            <section className="card" style={{ padding: 18 }}>
+              <div className="table-card-head">
+                <div>
+                  <h2 className="section-title">Assigned Classrooms</h2>
+                  <p className="section-note" style={{ marginBottom: 0 }}>Classes led by {teacher.name}</p>
+                </div>
+                <Link href="/classes" className="btn ghost small">View classes <ArrowRight size={13} /></Link>
+              </div>
+
+              {teacher.classes.length ? (
+                <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12 }}>
+                  {teacher.classes.map((cls) => (
+                    <article className="card class-card" key={cls.id} style={{ minHeight: 100, padding: 14 }}>
+                      <div className="class-grade">Grade {cls.grade} · Section {cls.section}</div>
+                      <h3 className="class-title" style={{ fontSize: 16 }}>{cls.name}</h3>
+                      <div className="class-meta">
+                        <span>{cls.studentCount} students</span>
+                        <span>Room {cls.room || '—'}</span>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              ) : (
+                <Empty title="No classes assigned" detail="Assign this teacher to a class from the Classes page." />
+              )}
+            </section>
+
+            <section className="card table-card">
+              <div className="table-card-head">
+                <div>
+                  <h2 className="section-title">Enrolled Student Cohort</h2>
+                  <p className="section-note" style={{ marginBottom: 0 }}>Students in classes taught by {teacher.name}</p>
+                </div>
+                <span className="pill active">{teacher.students.length} students</span>
+              </div>
+
+              {teacher.students.length ? (
+                <div className="table-wrap">
+                  <table className="data-table">
+                    <thead>
+                      <tr>
+                        <th>Student</th>
+                        <th>Class</th>
+                        <th>Grade</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {teacher.students.map((student) => (
+                        <tr key={student.id}>
+                          <td>
+                            <div className="person">
+                              <Avatar name={student.name} />
+                              <div>
+                                <b>{student.name}</b>
+                                <small>{student.admissionNumber}</small>
+                              </div>
+                            </div>
+                          </td>
+                          <td><span className="pill active">{student.className || '—'}</span></td>
+                          <td>Grade {student.grade} · {student.section}</td>
+                          <td>{student.email}</td>
+                          <td>{student.phone || '—'}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ) : (
+                <Empty title="No students currently assigned" detail="Students assigned to this teacher's classes will appear here." />
+              )}
+            </section>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
+
 function ClassesPage() {
   const client = useQueryClient();
-  const classes = useGetClasses(); const students = useGetStudents(); const staff = useGetStaff();
+  const classes = useGetClasses(); const students = useGetStudents(); const teachers = useGetTeachers();
   const create = useCreateClass(); const update = useUpdateClass(); const remove = useDeleteClass();
   const [modal, setModal] = useState(false); const [editing, setEditing] = useState<SchoolClass | null>(null);
-  const invalidate = () => { void client.invalidateQueries({ queryKey: getGetClassesQueryKey() }); void client.invalidateQueries({ queryKey: getGetStudentsQueryKey() }); void client.invalidateQueries({ queryKey: getGetSchoolOverviewQueryKey() }); };
+  const invalidate = () => { void client.invalidateQueries({ queryKey: getGetClassesQueryKey() }); void client.invalidateQueries({ queryKey: getGetStudentsQueryKey() }); void client.invalidateQueries({ queryKey: getGetTeachersQueryKey() }); void client.invalidateQueries({ queryKey: getGetSchoolOverviewQueryKey() }); };
   const submit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault(); const values = new FormData(event.currentTarget);
     const data = { name: String(values.get('name')), grade: String(values.get('grade')), section: String(values.get('section')), room: String(values.get('room')), teacherId: values.get('teacherId') ? Number(values.get('teacherId')) : null, studentIds: values.getAll('studentIds').map(Number) };
@@ -236,7 +595,7 @@ function ClassesPage() {
     {modal && <Modal title={editing ? 'Edit class' : 'Create a class'} close={() => setModal(false)}><form onSubmit={submit}><div className="form-grid">
       <Field label="Class name"><input name="name" required defaultValue={editing?.name} placeholder="e.g. Cedar Room" /></Field><Field label="Room"><input name="room" required defaultValue={editing?.room} /></Field>
       <Field label="Grade"><input name="grade" required defaultValue={editing?.grade} /></Field><Field label="Section"><input name="section" required defaultValue={editing?.section} /></Field>
-      <Field label="Class teacher" full><select name="teacherId" defaultValue={editing?.teacherId ?? ''}><option value="">Unassigned</option>{(staff.data || []).map((person) => <option value={person.id} key={person.id}>{person.name} — {person.role}</option>)}</select></Field>
+      <Field label="Class teacher" full><select name="teacherId" defaultValue={editing?.teacherId ?? ''}><option value="">Unassigned</option>{(teachers.data || []).map((person) => <option value={person.id} key={person.id}>{person.name} — {person.subject}</option>)}</select></Field>
       <Field label="Students" full><div style={{ maxHeight: 155, overflow: 'auto', border: '1px solid #e2ded3', borderRadius: 9, padding: '7px 10px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6 }}>{(students.data || []).map((student) => <label key={student.id} style={{ display: 'flex', alignItems: 'center', gap: 7, fontSize: 11, color: '#56675d' }}><input type="checkbox" name="studentIds" value={student.id} defaultChecked={editing?.studentIds.includes(student.id)} />{student.name}</label>)}</div></Field>
     </div><div className="modal-actions"><button type="button" className="btn secondary" onClick={() => setModal(false)}>Cancel</button><button className="btn" disabled={create.isPending || update.isPending}>{editing ? 'Save class' : 'Create class'}</button></div></form></Modal>}
   </>;
@@ -325,6 +684,7 @@ function RoutedPages() {
     <Route path="/" component={Dashboard} />
     <Route path="/attendance" component={AttendancePage} />
     <Route path="/students" component={StudentsPage} />
+    <Route path="/teachers" component={TeachersPage} />
     <Route path="/classes" component={ClassesPage} />
     <Route path="/fees" component={FeesPage} />
     <Route path="/events" component={EventsPage} />

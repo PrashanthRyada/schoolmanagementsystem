@@ -157,6 +157,167 @@ export const DeleteStudentResponse = zod.void()
 
 
 /**
+ * @summary List teachers with assigned classes
+ */
+export const GetTeachersQueryParams = zod.object({
+  "search": zod.coerce.string().optional()
+})
+
+export const GetTeachersResponseItem = zod.object({
+  "id": zod.number().int(),
+  "name": zod.string(),
+  "email": zod.string(),
+  "phone": zod.string(),
+  "subject": zod.string(),
+  "department": zod.string(),
+  "qualification": zod.string(),
+  "avatarUrl": zod.string().nullish(),
+  "classes": zod.array(zod.object({
+  "id": zod.number().int(),
+  "name": zod.string(),
+  "grade": zod.string(),
+  "section": zod.string(),
+  "room": zod.string(),
+  "studentCount": zod.number().int()
+})),
+  "studentCount": zod.number().int()
+})
+export const GetTeachersResponse = zod.array(GetTeachersResponseItem)
+
+
+/**
+ * @summary Create a teacher
+ */
+
+
+
+
+
+
+export const CreateTeacherBody = zod.object({
+  "name": zod.string().min(1),
+  "email": zod.string().min(1),
+  "phone": zod.string().optional(),
+  "subject": zod.string().min(1),
+  "department": zod.string().min(1),
+  "qualification": zod.string().optional(),
+  "avatarUrl": zod.string().nullish()
+})
+
+export const CreateTeacherResponse = zod.object({
+  "id": zod.number().int(),
+  "name": zod.string(),
+  "email": zod.string(),
+  "phone": zod.string(),
+  "subject": zod.string(),
+  "department": zod.string(),
+  "qualification": zod.string(),
+  "avatarUrl": zod.string().nullish(),
+  "classes": zod.array(zod.object({
+  "id": zod.number().int(),
+  "name": zod.string(),
+  "grade": zod.string(),
+  "section": zod.string(),
+  "room": zod.string(),
+  "studentCount": zod.number().int()
+})),
+  "studentCount": zod.number().int()
+})
+
+
+/**
+ * @summary Get teacher profile with assigned classes and student roster
+ */
+export const GetTeacherByIdParams = zod.object({
+  "teacherId": zod.coerce.number().int()
+})
+
+export const GetTeacherByIdResponse = zod.object({
+  "id": zod.number().int(),
+  "name": zod.string(),
+  "email": zod.string(),
+  "phone": zod.string(),
+  "subject": zod.string(),
+  "department": zod.string(),
+  "qualification": zod.string(),
+  "avatarUrl": zod.string().nullish(),
+  "classes": zod.array(zod.object({
+  "id": zod.number().int(),
+  "name": zod.string(),
+  "grade": zod.string(),
+  "section": zod.string(),
+  "room": zod.string(),
+  "studentCount": zod.number().int()
+})),
+  "studentCount": zod.number().int(),
+  "students": zod.array(zod.object({
+  "id": zod.number().int(),
+  "name": zod.string(),
+  "admissionNumber": zod.string(),
+  "grade": zod.string(),
+  "section": zod.string(),
+  "className": zod.string().nullish(),
+  "email": zod.string(),
+  "phone": zod.string().optional()
+}))
+})
+
+
+/**
+ * @summary Update teacher
+ */
+export const UpdateTeacherParams = zod.object({
+  "teacherId": zod.coerce.number().int()
+})
+
+
+
+
+
+
+
+export const UpdateTeacherBody = zod.object({
+  "name": zod.string().min(1).optional(),
+  "email": zod.string().min(1).optional(),
+  "phone": zod.string().optional(),
+  "subject": zod.string().min(1).optional(),
+  "department": zod.string().min(1).optional(),
+  "qualification": zod.string().optional(),
+  "avatarUrl": zod.string().nullish()
+})
+
+export const UpdateTeacherResponse = zod.object({
+  "id": zod.number().int(),
+  "name": zod.string(),
+  "email": zod.string(),
+  "phone": zod.string(),
+  "subject": zod.string(),
+  "department": zod.string(),
+  "qualification": zod.string(),
+  "avatarUrl": zod.string().nullish(),
+  "classes": zod.array(zod.object({
+  "id": zod.number().int(),
+  "name": zod.string(),
+  "grade": zod.string(),
+  "section": zod.string(),
+  "room": zod.string(),
+  "studentCount": zod.number().int()
+})),
+  "studentCount": zod.number().int()
+})
+
+
+/**
+ * @summary Delete a teacher
+ */
+export const DeleteTeacherParams = zod.object({
+  "teacherId": zod.coerce.number().int()
+})
+
+export const DeleteTeacherResponse = zod.void()
+
+
+/**
  * @summary List staff
  */
 export const GetStaffResponseItem = zod.object({

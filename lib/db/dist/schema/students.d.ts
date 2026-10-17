@@ -160,14 +160,14 @@ export declare const studentsTable: import("drizzle-orm/pg-core").PgTableWithCol
     dialect: "pg";
 }>;
 export declare const insertStudentSchema: z.ZodObject<{
-    classId: z.ZodOptional<z.ZodNullable<z.ZodInt>>;
     name: z.ZodString;
-    grade: z.ZodString;
-    section: z.ZodString;
-    admissionNumber: z.ZodString;
     email: z.ZodString;
     phone: z.ZodOptional<z.ZodString>;
     avatarUrl: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    grade: z.ZodString;
+    section: z.ZodString;
+    admissionNumber: z.ZodString;
+    classId: z.ZodOptional<z.ZodNullable<z.ZodInt>>;
 }, {
     out: {};
     in: {};

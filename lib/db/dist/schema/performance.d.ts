@@ -126,8 +126,8 @@ export declare const performanceTable: import("drizzle-orm/pg-core").PgTableWith
     dialect: "pg";
 }>;
 export declare const insertPerformanceSchema: z.ZodObject<{
-    studentId: z.ZodInt;
     subject: z.ZodString;
+    studentId: z.ZodInt;
     assessment: z.ZodString;
     score: z.ZodNumber;
     maxScore: z.ZodNumber;

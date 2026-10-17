@@ -30,23 +30,30 @@ The application provides an administrative workspace tailored for school operati
 - **Assessment Scoring**: Form to record new quiz, exam, or test results (`score / maxScore`).
 - **Student Management**: Modal dialogs to add, edit, and delete student records with class mappings.
 
-### 4. Classroom Organization (`/classes`)
+### 4. Faculty & Mentorship (`/teachers`)
+- **Dedicated Teachers Directory**: Manage educators with subject specialization, department, phone, email, and qualifications.
+- **Classroom Mentorship Relations**: View assigned classrooms for each teacher.
+- **Student Cohort Tracking**: Directly view and mentor all students enrolled across classes taught by the teacher.
+- **Full Faculty Management**: Add, update, and remove teachers with automatic cascade/unassign handling on classes.
+
+### 5. Classroom Organization (`/classes`)
 - **Class Cards**: Visual cards displaying Grade, Section, Room number, and assigned class teacher.
+- **Teacher Selection**: Easily assign class teachers directly from the dedicated teachers directory.
 - **Student Roster Mapping**: Direct multi-student checkbox mapping to classrooms.
 - **Class Management**: Create, edit, and remove class cohorts.
 
-### 5. Fee Collection & Accounts (`/fees`)
+### 6. Fee Collection & Accounts (`/fees`)
 - **Financial Analytics**: Invoiced total, collected amount, and outstanding balances.
 - **Status Filter**: Filter by payment status (`paid`, `partial`, `pending`).
 - **Invoice Management**: Issue new fee invoices with specified periods (e.g., "Term 1 - 2024"), amounts, and due dates.
 - **One-Click Settlement**: "Mark paid" quick button and invoice edit/deletion controls.
 
-### 6. School Events & Cultural Calendar (`/events`)
+### 7. School Events & Cultural Calendar (`/events`)
 - **Calendar Highlights**: Event cards featuring custom accent colors, dates, times, and venue locations.
 - **Category Tags**: Tag events by Academics, Culture, Sports, or Community.
 - **Event Management**: Create, edit, and delete school gatherings and milestones.
 
-### 7. Homepage Media Carousel Manager (`/media`)
+### 8. Homepage Media Carousel Manager (`/media`)
 - **Media Gallery**: Image and video management for the front-facing website carousel.
 - **Order Controls**: Drag-free arrow buttons to rearrange slide positions.
 - **Visibility Toggle**: Instantly activate or hide media slides from the public view.
