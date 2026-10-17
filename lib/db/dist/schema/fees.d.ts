@@ -1,0 +1,123 @@
+import { z } from "zod/v4";
+export declare const feesTable: import("drizzle-orm/pg-core").PgTableWithColumns<{
+    name: "school_fees";
+    schema: undefined;
+    columns: {
+        id: import("drizzle-orm/pg-core").PgColumn<{
+            name: "id";
+            tableName: "school_fees";
+            dataType: "number";
+            columnType: "PgSerial";
+            data: number;
+            driverParam: number;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: true;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        studentId: import("drizzle-orm/pg-core").PgColumn<{
+            name: "student_id";
+            tableName: "school_fees";
+            dataType: "number";
+            columnType: "PgInteger";
+            data: number;
+            driverParam: string | number;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        period: import("drizzle-orm/pg-core").PgColumn<{
+            name: "period";
+            tableName: "school_fees";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        amount: import("drizzle-orm/pg-core").PgColumn<{
+            name: "amount";
+            tableName: "school_fees";
+            dataType: "number";
+            columnType: "PgNumericNumber";
+            data: number;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        paidAmount: import("drizzle-orm/pg-core").PgColumn<{
+            name: "paid_amount";
+            tableName: "school_fees";
+            dataType: "number";
+            columnType: "PgNumericNumber";
+            data: number;
+            driverParam: string;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        dueDate: import("drizzle-orm/pg-core").PgColumn<{
+            name: "due_date";
+            tableName: "school_fees";
+            dataType: "string";
+            columnType: "PgDateString";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+    };
+    dialect: "pg";
+}>;
+export declare const insertFeeSchema: z.ZodObject<{
+    studentId: z.ZodInt;
+    period: z.ZodString;
+    amount: z.ZodNumber;
+    paidAmount: z.ZodOptional<z.ZodNumber>;
+    dueDate: z.ZodString;
+}, {
+    out: {};
+    in: {};
+}>;
+export type InsertFee = z.infer<typeof insertFeeSchema>;
+export type FeeRow = typeof feesTable.$inferSelect;
+//# sourceMappingURL=fees.d.ts.map

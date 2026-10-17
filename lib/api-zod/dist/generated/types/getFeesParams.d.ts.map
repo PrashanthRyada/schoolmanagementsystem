@@ -1,0 +1,1 @@
+{"version":3,"file":"getFeesParams.d.ts","sourceRoot":"","sources":["../../../src/generated/types/getFeesParams.ts"],"names":[],"mappings":"AAAA;;;;;;GAMG;AACH,OAAO,KAAK,EAAE,aAAa,EAAE,MAAM,iBAAiB,CAAC;AAErD,MAAM,MAAM,aAAa,GAAG;IAC5B,SAAS,CAAC,EAAE,MAAM,CAAC;IACnB,MAAM,CAAC,EAAE,aAAa,CAAC;CACtB,CAAC"}

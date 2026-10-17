@@ -1,0 +1,9 @@
+export * from "./attendance";
+export * from "./classes";
+export * from "./events";
+export * from "./fees";
+export * from "./homepage-media";
+export * from "./performance";
+export * from "./staff";
+export * from "./students";
+//# sourceMappingURL=index.d.ts.map

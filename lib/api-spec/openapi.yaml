@@ -1,0 +1,706 @@
+openapi: 3.1.0
+info:
+  # Do not change the title, if the title changes, the import paths will be broken
+  title: Api
+  version: 0.1.0
+  description: API specification
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: dashboard
+    description: School dashboard summaries
+  - name: students
+    description: Student records and academic performance
+  - name: staff
+    description: Staff records
+  - name: classes
+    description: Class organization
+  - name: attendance
+    description: Student and staff attendance
+  - name: fees
+    description: Fee invoices and collections
+  - name: events
+    description: Cultural activities and upcoming events
+  - name: media
+    description: Homepage carousel media
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      description: Returns server health status
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+  /school/overview:
+    get:
+      operationId: getSchoolOverview
+      tags: [dashboard]
+      summary: Get school dashboard overview
+      responses:
+        "200":
+          description: Current school totals, fee analytics, and attendance summaries
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SchoolOverview"
+  /students:
+    get:
+      operationId: getStudents
+      tags: [students]
+      summary: List students
+      parameters:
+        - in: query
+          name: search
+          schema: { type: string }
+        - in: query
+          name: classId
+          schema: { type: integer }
+      responses:
+        "200":
+          description: Students
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/Student" }
+    post:
+      operationId: createStudent
+      tags: [students]
+      summary: Create a student
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/StudentInput" }
+      responses:
+        "201":
+          description: Student created
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Student" }
+  /students/{studentId}:
+    parameters:
+      - in: path
+        name: studentId
+        required: true
+        schema: { type: integer }
+    patch:
+      operationId: updateStudent
+      tags: [students]
+      summary: Update a student
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/StudentUpdate" }
+      responses:
+        "200":
+          description: Updated student
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Student" }
+        "404": { description: Student not found }
+    delete:
+      operationId: deleteStudent
+      tags: [students]
+      summary: Delete a student
+      responses:
+        "204": { description: Student deleted }
+        "404": { description: Student not found }
+  /staff:
+    get:
+      operationId: getStaff
+      tags: [staff]
+      summary: List staff
+      responses:
+        "200":
+          description: Staff
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/Staff" }
+  /classes:
+    get:
+      operationId: getClasses
+      tags: [classes]
+      summary: List classes and mapped students
+      responses:
+        "200":
+          description: Classes
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/SchoolClass" }
+    post:
+      operationId: createClass
+      tags: [classes]
+      summary: Create a class
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ClassInput" }
+      responses:
+        "201":
+          description: Class created
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/SchoolClass" }
+  /classes/{classId}:
+    parameters:
+      - in: path
+        name: classId
+        required: true
+        schema: { type: integer }
+    patch:
+      operationId: updateClass
+      tags: [classes]
+      summary: Update a class and student mappings
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ClassUpdate" }
+      responses:
+        "200":
+          description: Updated class
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/SchoolClass" }
+        "404": { description: Class not found }
+    delete:
+      operationId: deleteClass
+      tags: [classes]
+      summary: Delete a class
+      responses:
+        "204": { description: Class deleted }
+        "404": { description: Class not found }
+  /attendance:
+    get:
+      operationId: getAttendance
+      tags: [attendance]
+      summary: List attendance for a date
+      parameters:
+        - in: query
+          name: date
+          required: true
+          schema: { type: string, format: date }
+        - in: query
+          name: personType
+          schema: { type: string, enum: [student, staff] }
+        - in: query
+          name: classId
+          schema: { type: integer }
+      responses:
+        "200":
+          description: Attendance records
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/AttendanceRecord" }
+    post:
+      operationId: markAttendance
+      tags: [attendance]
+      summary: Mark or update attendance
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/AttendanceInput" }
+      responses:
+        "200":
+          description: Saved attendance record
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/AttendanceRecord" }
+  /fees:
+    get:
+      operationId: getFees
+      tags: [fees]
+      summary: List fee invoices
+      parameters:
+        - in: query
+          name: studentId
+          schema: { type: integer }
+        - in: query
+          name: status
+          schema: { type: string, enum: [paid, partial, pending] }
+      responses:
+        "200":
+          description: Fee invoices
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/FeeInvoice" }
+    post:
+      operationId: createFee
+      tags: [fees]
+      summary: Create a fee invoice
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/FeeInput" }
+      responses:
+        "201":
+          description: Fee invoice created
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/FeeInvoice" }
+  /fees/{feeId}:
+    parameters:
+      - in: path
+        name: feeId
+        required: true
+        schema: { type: integer }
+    patch:
+      operationId: updateFee
+      tags: [fees]
+      summary: Update fee payment details
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/FeeUpdate" }
+      responses:
+        "200":
+          description: Updated fee invoice
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/FeeInvoice" }
+        "404": { description: Fee invoice not found }
+    delete:
+      operationId: deleteFee
+      tags: [fees]
+      summary: Delete a fee invoice
+      responses:
+        "204": { description: Fee invoice deleted }
+        "404": { description: Fee invoice not found }
+  /students/{studentId}/performance:
+    parameters:
+      - in: path
+        name: studentId
+        required: true
+        schema: { type: integer }
+    get:
+      operationId: getStudentPerformance
+      tags: [students]
+      summary: Get a student's academic performance
+      responses:
+        "200":
+          description: Performance records
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/PerformanceRecord" }
+    post:
+      operationId: addStudentPerformance
+      tags: [students]
+      summary: Add a performance result
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/PerformanceInput" }
+      responses:
+        "201":
+          description: Performance record created
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/PerformanceRecord" }
+  /events:
+    get:
+      operationId: getEvents
+      tags: [events]
+      summary: List school events
+      responses:
+        "200":
+          description: Events
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/SchoolEvent" }
+    post:
+      operationId: createEvent
+      tags: [events]
+      summary: Create an event
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/EventInput" }
+      responses:
+        "201":
+          description: Event created
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/SchoolEvent" }
+  /events/{eventId}:
+    parameters:
+      - in: path
+        name: eventId
+        required: true
+        schema: { type: integer }
+    patch:
+      operationId: updateEvent
+      tags: [events]
+      summary: Update an event
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/EventUpdate" }
+      responses:
+        "200":
+          description: Updated event
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/SchoolEvent" }
+        "404": { description: Event not found }
+    delete:
+      operationId: deleteEvent
+      tags: [events]
+      summary: Delete an event
+      responses:
+        "204": { description: Event deleted }
+        "404": { description: Event not found }
+  /homepage-media:
+    get:
+      operationId: getHomepageMedia
+      tags: [media]
+      summary: List homepage carousel media
+      responses:
+        "200":
+          description: Homepage media items
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/HomepageMedia" }
+    post:
+      operationId: createHomepageMedia
+      tags: [media]
+      summary: Add homepage carousel media
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/HomepageMediaInput" }
+      responses:
+        "201":
+          description: Media added
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/HomepageMedia" }
+  /homepage-media/{mediaId}:
+    parameters:
+      - in: path
+        name: mediaId
+        required: true
+        schema: { type: integer }
+    patch:
+      operationId: updateHomepageMedia
+      tags: [media]
+      summary: Update homepage media
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/HomepageMediaUpdate" }
+      responses:
+        "200":
+          description: Updated media
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/HomepageMedia" }
+        "404": { description: Media not found }
+    delete:
+      operationId: deleteHomepageMedia
+      tags: [media]
+      summary: Delete homepage media
+      responses:
+        "204": { description: Media deleted }
+        "404": { description: Media not found }
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+    Student:
+      type: object
+      required: [id, name, admissionNumber, grade, section, email, attendanceRate, averageScore]
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        admissionNumber: { type: string }
+        grade: { type: string }
+        section: { type: string }
+        email: { type: string }
+        phone: { type: string }
+        avatarUrl: { type: ["string", "null"] }
+        attendanceRate: { type: number }
+        averageScore: { type: number }
+        classId: { type: ["integer", "null"] }
+        className: { type: ["string", "null"] }
+    StudentInput:
+      type: object
+      required: [name, admissionNumber, grade, section]
+      properties:
+        name: { type: string, minLength: 1 }
+        admissionNumber: { type: string, minLength: 1 }
+        grade: { type: string, minLength: 1 }
+        section: { type: string, minLength: 1 }
+        email: { type: string }
+        phone: { type: string }
+        avatarUrl: { type: string }
+        classId: { type: ["integer", "null"] }
+    StudentUpdate:
+      type: object
+      properties:
+        name: { type: string, minLength: 1 }
+        admissionNumber: { type: string, minLength: 1 }
+        grade: { type: string, minLength: 1 }
+        section: { type: string, minLength: 1 }
+        email: { type: string }
+        phone: { type: string }
+        avatarUrl: { type: ["string", "null"] }
+        classId: { type: ["integer", "null"] }
+    Staff:
+      type: object
+      required: [id, name, role, email, department]
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        role: { type: string }
+        email: { type: string }
+        department: { type: string }
+        avatarUrl: { type: ["string", "null"] }
+    SchoolClass:
+      type: object
+      required: [id, name, grade, section, teacherId, teacherName, studentIds, studentCount, room]
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        grade: { type: string }
+        section: { type: string }
+        teacherId: { type: ["integer", "null"] }
+        teacherName: { type: ["string", "null"] }
+        studentIds:
+          type: array
+          items: { type: integer }
+        studentCount: { type: integer }
+        room: { type: string }
+    ClassInput:
+      type: object
+      required: [name, grade, section, room]
+      properties:
+        name: { type: string, minLength: 1 }
+        grade: { type: string, minLength: 1 }
+        section: { type: string, minLength: 1 }
+        teacherId: { type: ["integer", "null"] }
+        room: { type: string }
+        studentIds:
+          type: array
+          items: { type: integer }
+    ClassUpdate:
+      type: object
+      properties:
+        name: { type: string, minLength: 1 }
+        grade: { type: string, minLength: 1 }
+        section: { type: string, minLength: 1 }
+        teacherId: { type: ["integer", "null"] }
+        room: { type: string }
+        studentIds:
+          type: array
+          items: { type: integer }
+    AttendanceRecord:
+      type: object
+      required: [id, personId, personType, personName, date, status]
+      properties:
+        id: { type: integer }
+        personId: { type: integer }
+        personType: { type: string, enum: [student, staff] }
+        personName: { type: string }
+        classId: { type: ["integer", "null"] }
+        className: { type: ["string", "null"] }
+        date: { type: string, format: date }
+        status: { type: string, enum: [present, absent, late, leave] }
+        note: { type: ["string", "null"] }
+    AttendanceInput:
+      type: object
+      required: [personId, personType, date, status]
+      properties:
+        personId: { type: integer }
+        personType: { type: string, enum: [student, staff] }
+        classId: { type: ["integer", "null"] }
+        date: { type: string, format: date }
+        status: { type: string, enum: [present, absent, late, leave] }
+        note: { type: string }
+    FeeInvoice:
+      type: object
+      required: [id, studentId, studentName, admissionNumber, period, amount, paidAmount, dueDate, status]
+      properties:
+        id: { type: integer }
+        studentId: { type: integer }
+        studentName: { type: string }
+        admissionNumber: { type: string }
+        period: { type: string }
+        amount: { type: number }
+        paidAmount: { type: number }
+        dueDate: { type: string, format: date }
+        status: { type: string, enum: [paid, partial, pending] }
+    FeeInput:
+      type: object
+      required: [studentId, period, amount, dueDate]
+      properties:
+        studentId: { type: integer }
+        period: { type: string, minLength: 1 }
+        amount: { type: number, exclusiveMinimum: 0 }
+        paidAmount: { type: number, minimum: 0 }
+        dueDate: { type: string, format: date }
+    FeeUpdate:
+      type: object
+      properties:
+        period: { type: string }
+        amount: { type: number, exclusiveMinimum: 0 }
+        paidAmount: { type: number, minimum: 0 }
+        dueDate: { type: string, format: date }
+    PerformanceRecord:
+      type: object
+      required: [id, studentId, subject, assessment, score, maxScore, recordedAt]
+      properties:
+        id: { type: integer }
+        studentId: { type: integer }
+        subject: { type: string }
+        assessment: { type: string }
+        score: { type: number }
+        maxScore: { type: number }
+        recordedAt: { type: string, format: date }
+    PerformanceInput:
+      type: object
+      required: [subject, assessment, score, maxScore, recordedAt]
+      properties:
+        subject: { type: string, minLength: 1 }
+        assessment: { type: string, minLength: 1 }
+        score: { type: number, minimum: 0 }
+        maxScore: { type: number, exclusiveMinimum: 0 }
+        recordedAt: { type: string, format: date }
+    SchoolEvent:
+      type: object
+      required: [id, title, category, date, time, location, description, color]
+      properties:
+        id: { type: integer }
+        title: { type: string }
+        category: { type: string }
+        date: { type: string, format: date }
+        time: { type: string }
+        location: { type: string }
+        description: { type: string }
+        color: { type: string }
+    EventInput:
+      type: object
+      required: [title, category, date, time, location, description]
+      properties:
+        title: { type: string, minLength: 1 }
+        category: { type: string, minLength: 1 }
+        date: { type: string, format: date }
+        time: { type: string }
+        location: { type: string }
+        description: { type: string }
+        color: { type: string }
+    EventUpdate:
+      type: object
+      properties:
+        title: { type: string }
+        category: { type: string }
+        date: { type: string, format: date }
+        time: { type: string }
+        location: { type: string }
+        description: { type: string }
+        color: { type: string }
+    HomepageMedia:
+      type: object
+      required: [id, title, caption, mediaType, url, isActive, sortOrder]
+      properties:
+        id: { type: integer }
+        title: { type: string }
+        caption: { type: string }
+        mediaType: { type: string, enum: [image, video] }
+        url: { type: string, minLength: 1 }
+        isActive: { type: boolean }
+        sortOrder: { type: integer }
+    HomepageMediaInput:
+      type: object
+      required: [title, caption, mediaType, url]
+      properties:
+        title: { type: string, minLength: 1 }
+        caption: { type: string }
+        mediaType: { type: string, enum: [image, video] }
+        url: { type: string, minLength: 1 }
+        isActive: { type: boolean }
+        sortOrder: { type: integer }
+    HomepageMediaUpdate:
+      type: object
+      properties:
+        title: { type: string }
+        caption: { type: string }
+        mediaType: { type: string, enum: [image, video] }
+        url: { type: string, minLength: 1 }
+        isActive: { type: boolean }
+        sortOrder: { type: integer }
+    FeeTrend:
+      type: object
+      required: [month, paid, pending]
+      properties:
+        month: { type: string }
+        paid: { type: number }
+        pending: { type: number }
+    AttendanceSummary:
+      type: object
+      required: [studentPresent, studentTotal, staffPresent, staffTotal]
+      properties:
+        studentPresent: { type: integer }
+        studentTotal: { type: integer }
+        staffPresent: { type: integer }
+        staffTotal: { type: integer }
+    FeeSummary:
+      type: object
+      required: [paidAmount, totalAmount, pendingAmount, pendingStudents, paidStudents]
+      properties:
+        paidAmount: { type: number }
+        totalAmount: { type: number }
+        pendingAmount: { type: number }
+        pendingStudents: { type: integer }
+        paidStudents: { type: integer }
+    SchoolOverview:
+      type: object
+      required: [studentCount, staffCount, classCount, attendance, fees, feeTrend]
+      properties:
+        studentCount: { type: integer }
+        staffCount: { type: integer }
+        classCount: { type: integer }
+        attendance: { $ref: "#/components/schemas/AttendanceSummary" }
+        fees: { $ref: "#/components/schemas/FeeSummary" }
+        feeTrend:
+          type: array
+          items: { $ref: "#/components/schemas/FeeTrend" }
+
