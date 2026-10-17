@@ -1,7 +1,9 @@
+import { type NodePgDatabase } from "drizzle-orm/node-postgres";
 import * as schema from "./schema";
-export declare const pool: import("pg").Pool;
-export declare const db: import("drizzle-orm/node-postgres").NodePgDatabase<typeof schema> & {
-    $client: import("pg").Pool;
-};
+export type SchemaType = typeof schema;
+export type AppDatabase = NodePgDatabase<SchemaType>;
+export declare const pool: any;
+export declare const db: AppDatabase;
 export * from "./schema";
+export { seedDatabase } from "./seed";
 //# sourceMappingURL=index.d.ts.map
